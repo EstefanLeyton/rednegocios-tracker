@@ -427,7 +427,7 @@
     <h4>Historial de cambios</h4>
     <div id="changelog-panel"></div>
     <div class="io-footer" style="margin-top:8px;">
-      <button class="btn btn-danger" onclick="clearChangelog()">Limpiar historial</button>
+      <button class="btn btn-danger editor-only" onclick="clearChangelog()">Limpiar historial</button>
       <button class="btn" onclick="document.getElementById('changelog-panel-wrap').classList.remove('open')">Cerrar</button>
     </div>
   </div>
@@ -686,7 +686,7 @@ async function loadState() {
       });
       if (res.ok) {
         const json = await res.json();
-        const decoded = atob(json.content.replace(/\n/g, ''));
+        const decoded = decodeURIComponent(escape(atob(json.content.replace(/\n/g, ''))));
         data = JSON.parse(decoded);
       }
     } catch(e) { /* ambos fallaron */ }
@@ -700,7 +700,7 @@ async function loadState() {
     renderAll();
   } else {
     // Ambos fallaron: mostrar error visible, no pantalla en blanco
-    msgEl.textContent = 'No se pudo cargar el estado del tablero. Verificá tu conexión o intentá de nuevo.';
+    msgEl.textContent = 'No se pudo cargar el estado del tablero. Verifica tu conexión o vuelve a intentar.';
     errEl.classList.add('visible');
     // Si ya había estado en memoria, se mantiene (renderAll con lo que hay)
     renderAll();
@@ -894,17 +894,17 @@ async function saveChange() {
     // 4.6: manejo de errores por código HTTP
     let msg;
     if (err.status === 401) {
-      msg = 'Token inválido o expirado. Reingresá tu PAT.';
+      msg = 'Token inválido o expirado. Vuelve a ingresar tu PAT.';
       showFeedback('error', msg);
       setTimeout(() => promptPat(), 800);
     } else if (err.status === 403) {
-      msg = 'Límite o permisos insuficientes en GitHub. Verificá el PAT.';
+      msg = 'El token no tiene permisos o pudo expirar. Verifica que el PAT tenga acceso de escritura (Contents: lectura y escritura) y vuelve a ingresarlo.';
       showFeedback('error', msg);
     } else if (err.status === 409) {
-      msg = 'El archivo cambió mientras guardabas. Recargá la página.';
+      msg = 'El archivo cambió mientras guardabas. Recarga la página.';
       showFeedback('error', msg);
     } else {
-      msg = 'No se pudo guardar (red). Reintentá más tarde.';
+      msg = 'No se pudo guardar (problema de red). Vuelve a intentar más tarde.';
       showFeedback('error', msg);
     }
     // El estado en memoria NO se modifica ante error — se conserva el valor anterior
@@ -1164,7 +1164,7 @@ async function confirmReset() {
 
 // ─── PAT / MODO (tarea 3.4) ──────────────────────────────────────────────
 function promptPat() {
-  const pat = prompt('Pegá tu PAT de GitHub (Fine-grained, scope contents:write):');
+  const pat = prompt('Pega tu PAT de GitHub (Fine-grained, scope contents:write):');
   if (pat && pat.trim()) {
     localStorage.setItem('rdn_pat', pat.trim());
     location.reload();
@@ -1235,7 +1235,7 @@ async function exportToExcel() {
     // 7.2: carga lazy — solo descarga SheetJS si no está ya en memoria
     await loadSheetJS();
   } catch(e) {
-    alert('No se pudo cargar la librería de exportación. Verificá tu conexión a internet.');
+    alert('No se pudo cargar la librería de exportación. Verifica tu conexión a internet.');
     return;
   }
 
