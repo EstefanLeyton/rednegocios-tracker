@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:53:31.534Z",
+  "updated_at": "2026-06-17T20:53:50.416Z",
   "state": {
     "1": {
       "status": "review",
@@ -43,7 +43,7 @@
       "note": ""
     },
     "11": {
-      "status": "progress",
+      "status": "review",
       "note": ""
     },
     "12": {
@@ -484,6 +484,13 @@
       "ts": "2026-06-17T20:53:31.534Z",
       "id": 17,
       "name": "GAP: Firma electrónica de la Declaración Jurada",
+      "from": "progress",
+      "to": "review"
+    },
+    {
+      "ts": "2026-06-17T20:53:50.416Z",
+      "id": 20,
+      "name": "GAP-RDN-27 Ficha Bancaria digital con firma",
       "from": "progress",
       "to": "review"
     }
