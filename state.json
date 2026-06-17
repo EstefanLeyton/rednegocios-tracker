@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:53:50.416Z",
+  "updated_at": "2026-06-17T20:54:06.793Z",
   "state": {
     "1": {
       "status": "review",
@@ -63,7 +63,7 @@
       "note": ""
     },
     "16": {
-      "status": "progress",
+      "status": "review",
       "note": ""
     },
     "17": {
@@ -491,6 +491,13 @@
       "ts": "2026-06-17T20:53:50.416Z",
       "id": 20,
       "name": "GAP-RDN-27 Ficha Bancaria digital con firma",
+      "from": "progress",
+      "to": "review"
+    },
+    {
+      "ts": "2026-06-17T20:54:06.793Z",
+      "id": 28,
+      "name": "GAP Sistema de guardado automático en inscripción",
       "from": "progress",
       "to": "review"
     }
