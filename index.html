@@ -326,6 +326,90 @@
   /* ─── HIDDEN ─── */
   .hidden { display: none !important; }
 
+  /* ─── DONUT ─── */
+  #stats-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  #donut-wrap {
+    flex-shrink: 0;
+    position: relative;
+    width: 140px;
+    height: 140px;
+  }
+
+  #donut-wrap svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* Texto central del donut */
+  .donut-center-total {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    fill: #e8eaf2; /* var(--text) — contraste >7:1 sobre #0c0e14 */
+    dominant-baseline: central;
+  }
+  .donut-center-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .55rem;
+    fill: #6b7194; /* var(--muted) */
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    dominant-baseline: central;
+  }
+
+  /* Tooltip del donut */
+  #donut-tooltip {
+    position: fixed;
+    background: #1a1e2e;
+    border: 1px solid #2e3450;
+    border-radius: 7px;
+    padding: 7px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .75rem;
+    color: #e8eaf2;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity .15s;
+    box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  }
+  #donut-tooltip.visible { opacity: 1; }
+  #donut-tooltip strong { display: block; font-weight: 600; margin-bottom: 2px; }
+  #donut-tooltip span { color: #6b7194; font-size: .7rem; }
+
+  /* Stat cards: toman el espacio restante, sin margen propio (lo controla el flex padre) */
+  #summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    flex: 1;
+    margin-bottom: 0; /* el margen lo pone #stats-section */
+    min-width: 0;
+  }
+
+  /* Animación de entrada de los segmentos */
+  @keyframes donut-appear { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Responsive: pantallas chicas → columna */
+  @media (max-width: 600px) {
+    #stats-section { flex-direction: column; align-items: stretch; }
+    #donut-wrap { width: 120px; height: 120px; align-self: center; }
+  }
+
+  /* Prefers reduced motion: sin transiciones en el donut */
+  @media (prefers-reduced-motion: reduce) {
+    #donut-wrap circle { transition: none !important; animation: none !important; }
+  }
+
   /* ─── EMPTY STATE ─── */
   .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-size: .85rem; }
 
@@ -412,8 +496,13 @@
 
 <main>
 
-  <!-- Summary -->
-  <div class="summary-grid" id="summary-grid"></div>
+  <!-- Summary: donut (izquierda) + stat-cards (derecha como leyenda) -->
+  <div id="stats-section">
+    <div id="donut-wrap">
+      <!-- SVG renderizado dinámicamente por renderDonut() -->
+    </div>
+    <div class="summary-grid" id="summary-grid"></div>
+  </div>
 
   <!-- Banner de error de carga (tarea 2.3) -->
   <div id="load-error" role="alert">
@@ -461,6 +550,9 @@
   <div class="empty hidden" id="empty-msg">No se encontraron GAPs con los filtros aplicados.</div>
 
 </main>
+
+<!-- Tooltip flotante del donut (fuera del main para posicionamiento fixed limpio) -->
+<div id="donut-tooltip" role="tooltip" aria-hidden="true"></div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
@@ -1069,6 +1161,251 @@ function renderAll() {
   renderSummary();
 }
 
+// ─── DONUT CHART ─────────────────────────────────────────────────────────
+// Bandera: la animación de entrada se dispara una sola vez al primer render
+let _donutAnimated = false;
+
+/**
+ * buildDonutAriaLabel(counts, total): genera el texto descriptivo para accesibilidad.
+ */
+function buildDonutAriaLabel(counts, total) {
+  const statuses = ['queue','progress','done','blocked','dep','review','hold'];
+  const parts = statuses
+    .filter(s => counts[s] > 0)
+    .map(s => `${counts[s]} ${STATUS_LABELS[s].toLowerCase()}`)
+    .join(', ');
+  return `Distribución de ${total} GAPs: ${parts}.`;
+}
+
+/**
+ * renderDonut(counts, total): dibuja el donut SVG vainilla en #donut-wrap.
+ * Animación de entrada solo en el primer render (_donutAnimated guard).
+ * Hover en segmentos y sincronización con stat-cards.
+ */
+function renderDonut(counts, total) {
+  const wrap = document.getElementById('donut-wrap');
+  if (!wrap) return;
+
+  const STATUSES = ['queue','progress','done','blocked','dep','review','hold'];
+  const COLORS = {
+    queue:    '#64748b',
+    progress: '#3b82f6',
+    done:     '#10b981',
+    blocked:  '#ef4444',
+    dep:      '#f59e0b',
+    review:   '#a855f7',
+    hold:     '#6b7280'
+  };
+
+  const R   = 50;          // radio del círculo
+  const CX  = 60;          // centro x
+  const CY  = 60;          // centro y
+  const SW  = 16;          // stroke-width
+  const C   = 2 * Math.PI * R; // circunferencia ≈ 314.16
+
+  // Segmentos activos (count > 0)
+  const active = STATUSES.filter(s => counts[s] > 0);
+
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 120 120');
+  svg.setAttribute('role', 'img');
+
+  const ariaLabel = total > 0
+    ? buildDonutAriaLabel(counts, total)
+    : 'Sin datos de GAPs disponibles.';
+  svg.setAttribute('aria-label', ariaLabel);
+
+  // Track (círculo base de fondo)
+  const track = document.createElementNS(ns, 'circle');
+  track.setAttribute('cx', CX);
+  track.setAttribute('cy', CY);
+  track.setAttribute('r', R);
+  track.setAttribute('fill', 'none');
+  track.setAttribute('stroke', '#252a3d'); /* --border */
+  track.setAttribute('stroke-width', SW);
+  svg.appendChild(track);
+
+  if (total === 0) {
+    // Edge case: sin datos — mostrar aro vacío y texto "Sin datos"
+    const t1 = document.createElementNS(ns, 'text');
+    t1.setAttribute('x', CX);
+    t1.setAttribute('y', '54');
+    t1.setAttribute('text-anchor', 'middle');
+    t1.setAttribute('class', 'donut-center-total');
+    t1.style.fontSize = '0.7rem';
+    t1.textContent = 'Sin';
+    const t2 = document.createElementNS(ns, 'text');
+    t2.setAttribute('x', CX);
+    t2.setAttribute('y', '72');
+    t2.setAttribute('text-anchor', 'middle');
+    t2.setAttribute('class', 'donut-center-label');
+    t2.textContent = 'datos';
+    svg.appendChild(t1);
+    svg.appendChild(t2);
+    wrap.innerHTML = '';
+    wrap.appendChild(svg);
+    return;
+  }
+
+  // Construir segmentos
+  let accumulated = 0;
+  const segmentEls = []; // { el, status, count } — para hover
+
+  active.forEach((s, idx) => {
+    const frac  = counts[s] / total;
+    const seg   = frac * C;
+    const gap   = C - seg;
+    // dashoffset negativo para rotar el inicio del segmento
+    // partimos desde -90° (arriba), usando rotate(-90 60 60) en el transform
+    // el offset es la fracción acumulada anterior
+    const offset = -(accumulated) * C;
+
+    const circle = document.createElementNS(ns, 'circle');
+    circle.setAttribute('cx', CX);
+    circle.setAttribute('cy', CY);
+    circle.setAttribute('r', R);
+    circle.setAttribute('fill', 'none');
+    circle.setAttribute('stroke', COLORS[s]);
+    circle.setAttribute('stroke-width', SW);
+    circle.setAttribute('stroke-linecap', 'butt');
+    circle.setAttribute('transform', `rotate(-90 ${CX} ${CY})`);
+
+    // Transition CSS para la animación y los efectos de hover
+    circle.style.transition = 'stroke-dasharray 700ms ease-out, stroke-width 150ms ease, opacity 150ms ease';
+    if (_donutAnimated) {
+      // Ya animado: ir directo al valor final, sin delay
+      circle.setAttribute('stroke-dasharray', `${seg} ${gap}`);
+      circle.setAttribute('stroke-dashoffset', offset);
+    } else {
+      // Primer render: arrancar "vacío" y animar a valor final
+      circle.setAttribute('stroke-dasharray', `0 ${C}`);
+      circle.setAttribute('stroke-dashoffset', offset);
+      circle.style.transitionDelay = `${idx * 80}ms`;
+      // Forzar reflow antes de aplicar el valor final para que la transición arranque
+      circle._targetSeg = seg;
+      circle._targetGap = gap;
+    }
+
+    // data-status para identificar en hover
+    circle.dataset.status = s;
+    circle.setAttribute('role', 'img');
+    circle.setAttribute('aria-label', `${STATUS_LABELS[s]}: ${counts[s]} GAPs`);
+
+    svg.appendChild(circle);
+    segmentEls.push({ el: circle, status: s, count: counts[s] });
+    accumulated += frac;
+  });
+
+  // Texto central: total y "GAPs"
+  // Con dominant-baseline: central, y apunta al centro visual del glifo.
+  // Número grande (~18px alto en viewBox 120): y=55 → ligeramente arriba del centro
+  // Label pequeño (~7px): y=72 → pegado debajo
+  const textTotal = document.createElementNS(ns, 'text');
+  textTotal.setAttribute('x', CX);
+  textTotal.setAttribute('y', '54');
+  textTotal.setAttribute('text-anchor', 'middle');
+  textTotal.setAttribute('class', 'donut-center-total');
+  textTotal.textContent = total;
+
+  const textLabel = document.createElementNS(ns, 'text');
+  textLabel.setAttribute('x', CX);
+  textLabel.setAttribute('y', '72');
+  textLabel.setAttribute('text-anchor', 'middle');
+  textLabel.setAttribute('class', 'donut-center-label');
+  textLabel.textContent = 'GAPs';
+
+  svg.appendChild(textTotal);
+  svg.appendChild(textLabel);
+
+  wrap.innerHTML = '';
+  wrap.appendChild(svg);
+
+  // Disparar animación de entrada (primer render)
+  if (!_donutAnimated) {
+    // Un tick de RAF para asegurar que el DOM pintó el estado "vacío"
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        segmentEls.forEach(({ el }) => {
+          if (el._targetSeg !== undefined) {
+            el.setAttribute('stroke-dasharray', `${el._targetSeg} ${el._targetGap}`);
+          }
+        });
+        _donutAnimated = true;
+      });
+    });
+  }
+
+  // ── Hover: tooltip + énfasis (segmentos + stat-cards sincronizadas) ──────
+  const tooltip = document.getElementById('donut-tooltip');
+
+  function highlightSegment(activeStatus) {
+    segmentEls.forEach(({ el, status }) => {
+      if (status === activeStatus) {
+        el.style.opacity = '1';
+        el.setAttribute('stroke-width', SW + 3);
+      } else {
+        el.style.opacity = '0.35';
+        el.setAttribute('stroke-width', SW);
+      }
+    });
+    // Sincronizar con stat-cards
+    document.querySelectorAll('#summary-grid .summary-card[data-status]').forEach(card => {
+      card.style.opacity = card.dataset.status === activeStatus ? '1' : '0.4';
+    });
+  }
+
+  function clearHighlight() {
+    segmentEls.forEach(({ el }) => {
+      el.style.opacity = '1';
+      el.setAttribute('stroke-width', SW);
+    });
+    document.querySelectorAll('#summary-grid .summary-card[data-status]').forEach(card => {
+      card.style.opacity = '1';
+    });
+    if (tooltip) { tooltip.classList.remove('visible'); }
+  }
+
+  function showTooltip(e, s, count) {
+    if (!tooltip) return;
+    const pct = Math.round(count / total * 100);
+    tooltip.innerHTML = `<strong>${STATUS_LABELS[s]}</strong><span>${count} GAPs · ${pct}%</span>`;
+    tooltip.classList.add('visible');
+    moveTooltip(e);
+  }
+
+  function moveTooltip(e) {
+    if (!tooltip) return;
+    const offX = 14, offY = -32;
+    let x = e.clientX + offX;
+    let y = e.clientY + offY;
+    // Evitar que se salga por la derecha
+    const tw = tooltip.offsetWidth || 130;
+    if (x + tw > window.innerWidth - 8) x = e.clientX - tw - offX;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top  = y + 'px';
+  }
+
+  segmentEls.forEach(({ el, status, count }) => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('mouseenter', e => {
+      highlightSegment(status);
+      showTooltip(e, status, count);
+    });
+    el.addEventListener('mousemove', moveTooltip);
+    el.addEventListener('mouseleave', () => {
+      clearHighlight();
+    });
+  });
+
+  // Limpiar tooltip si el mouse sale del SVG
+  svg.addEventListener('mouseleave', clearHighlight);
+
+  // Exponer para sincronización desde las stat-cards
+  wrap._highlightSegment = highlightSegment;
+  wrap._clearHighlight   = clearHighlight;
+}
+
 function renderSummary() {
   const statuses = ['queue','progress','done','blocked','dep','review','hold'];
   const colors = { queue:'#64748b', progress:'#3b82f6', done:'#10b981', blocked:'#ef4444', dep:'#f59e0b', review:'#a855f7', hold:'#6b7280' };
@@ -1084,11 +1421,16 @@ function renderSummary() {
       <div class="sc-bar"><div class="sc-fill" style="width:100%;background:var(--border2)"></div></div>
     </div>
     ${statuses.map(s => `
-    <div class="summary-card">
+    <div class="summary-card" data-status="${s}"
+         onmouseenter="(function(){ const w=document.getElementById('donut-wrap'); if(w&&w._highlightSegment) w._highlightSegment('${s}'); })()"
+         onmouseleave="(function(){ const w=document.getElementById('donut-wrap'); if(w&&w._clearHighlight) w._clearHighlight(); })()">
       <span class="sc-count" style="color:${colors[s]}">${counts[s]}</span>
       <span class="sc-label">${STATUS_LABELS[s]}</span>
       <div class="sc-bar"><div class="sc-fill" style="width:${Math.round(counts[s]/total*100)}%;background:${colors[s]}"></div></div>
     </div>`).join('')}`;
+
+  // Renderizar el donut con los mismos counts
+  renderDonut(counts, total);
 }
 
 // downloadSnapshot eliminado — Fase 2: persistencia via GitHub raw/API (ADR-001, ADR-008)
