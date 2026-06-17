@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:52:56.127Z",
+  "updated_at": "2026-06-17T20:53:12.380Z",
   "state": {
     "1": {
       "status": "review",
@@ -27,7 +27,7 @@
       "note": ""
     },
     "7": {
-      "status": "progress",
+      "status": "blocked",
       "note": ""
     },
     "8": {
@@ -465,6 +465,13 @@
       "name": "GAP-RDN-3 Registro diferenciado por tipo proveedor",
       "from": "progress",
       "to": "review"
+    },
+    {
+      "ts": "2026-06-17T20:53:12.380Z",
+      "id": 13,
+      "name": "GAP-RDN-16 Integración DOE",
+      "from": "progress",
+      "to": "blocked"
     }
   ]
 }
