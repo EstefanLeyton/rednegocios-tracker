@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:11:09.720Z",
+  "updated_at": "2026-06-17T21:11:22.298Z",
   "state": {
     "1": {
       "status": "review",
@@ -411,7 +411,7 @@
       "note": ""
     },
     "103": {
-      "status": "queue",
+      "status": "progress",
       "note": ""
     },
     "104": {
@@ -610,6 +610,13 @@
       "ts": "2026-06-17T21:11:09.720Z",
       "id": 93,
       "name": "GAP-RDN-30 Desarrollo Dashboard de cumplimiento",
+      "from": "queue",
+      "to": "progress"
+    },
+    {
+      "ts": "2026-06-17T21:11:22.298Z",
+      "id": 96,
+      "name": "GAP-RDN-20 Desarrollo Dashboard de cumplimiento",
       "from": "queue",
       "to": "progress"
     }
