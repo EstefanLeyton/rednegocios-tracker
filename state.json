@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:00:41.661Z",
+  "updated_at": "2026-06-17T21:04:09.939Z",
   "state": {
     "1": {
       "status": "review",
@@ -200,7 +200,7 @@
     },
     "50": {
       "status": "queue",
-      "note": ""
+      "note": "falta detalle en el ticket"
     },
     "51": {
       "status": "queue",
@@ -570,6 +570,13 @@
       "name": "GAP-RDN-17 Integración Clave Tributaria",
       "from": "blocked",
       "to": "hold"
+    },
+    {
+      "ts": "2026-06-17T21:04:09.939Z",
+      "id": 50,
+      "name": "GAP Hacer un mantenedor en plataforma (evitar plan",
+      "from": "queue",
+      "to": "queue"
     }
   ]
 }
