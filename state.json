@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:52:18.896Z",
+  "updated_at": "2026-06-17T20:52:24.572Z",
   "state": {
     "1": {
       "status": "review",
@@ -11,7 +11,7 @@
       "note": ""
     },
     "3": {
-      "status": "progress",
+      "status": "review",
       "note": ""
     },
     "4": {
@@ -449,6 +449,13 @@
       "ts": "2026-06-17T20:52:18.896Z",
       "id": 3,
       "name": "GAP: Ficha Bancaria Digital",
+      "from": "progress",
+      "to": "review"
+    },
+    {
+      "ts": "2026-06-17T20:52:24.572Z",
+      "id": 4,
+      "name": "GAP: Validación automática contra fuentes públicas",
       "from": "progress",
       "to": "review"
     }
