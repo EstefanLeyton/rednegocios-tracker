@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:00:35.760Z",
+  "updated_at": "2026-06-17T21:00:41.661Z",
   "state": {
     "1": {
       "status": "review",
@@ -127,7 +127,7 @@
       "note": ""
     },
     "32": {
-      "status": "blocked",
+      "status": "hold",
       "note": "no hay detalle de objetivo"
     },
     "33": {
@@ -563,6 +563,13 @@
       "name": "GAP-RDN-17 Integración Clave Tributaria",
       "from": "queue",
       "to": "blocked"
+    },
+    {
+      "ts": "2026-06-17T21:00:41.661Z",
+      "id": 63,
+      "name": "GAP-RDN-17 Integración Clave Tributaria",
+      "from": "blocked",
+      "to": "hold"
     }
   ]
 }
