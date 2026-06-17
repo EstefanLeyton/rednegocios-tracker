@@ -647,7 +647,11 @@ let updatedAt = null; // ISO string del state.json
 function getStatus(uid) { return (state[uid] && state[uid].status) || 'queue'; }
 function getNote(uid)   { return (state[uid] && state[uid].note)   || ''; }
 
-// Tarea 2.3: loadState async desde raw.githubusercontent.com
+// Tarea 2.3 (+ fix red corporativa): loadState async.
+// Intento 1: MISMO ORIGEN (GitHub Pages, ruta relativa) — evita firewalls
+//            corporativos que bloquean raw.githubusercontent.com pero permiten github.io.
+// Intento 2: raw.githubusercontent.com (por si se abre desde otro origen).
+// Intento 3: Contents API (fallback sin auth).
 async function loadState() {
   const errEl  = document.getElementById('load-error');
   const msgEl  = document.getElementById('load-error-msg');
@@ -655,15 +659,25 @@ async function loadState() {
 
   let data = null;
 
-  // Intento 1: raw URL con cache-busting
+  // Intento 1: mismo origen (Pages) con cache-busting
   try {
-    const res = await fetch(`${STATE_RAW_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(`state.json?t=${Date.now()}`, { cache: 'no-store' });
     if (res.ok) {
       data = await res.json();
     }
   } catch(e) { /* ignorar, intentar fallback */ }
 
-  // Intento 2: Contents API (fallback sin auth)
+  // Intento 2: raw URL con cache-busting
+  if (!data) {
+    try {
+      const res = await fetch(`${STATE_RAW_URL}?t=${Date.now()}`, { cache: 'no-store' });
+      if (res.ok) {
+        data = await res.json();
+      }
+    } catch(e) { /* ignorar, intentar fallback */ }
+  }
+
+  // Intento 3: Contents API (fallback sin auth)
   if (!data) {
     try {
       const contentsUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/state.json`;
@@ -1248,7 +1262,7 @@ async function exportToExcel() {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
 initModeUI();
-loadState(); // async: carga desde raw.githubusercontent.com y llama renderAll() al terminar
+loadState(); // async: carga el estado (mismo origen → raw → API) y llama renderAll() al terminar
 document.getElementById('search-input').addEventListener('input', renderAll);
 document.getElementById('filter-hito').addEventListener('change', renderAll);
 document.getElementById('filter-status').addEventListener('change', renderAll);
