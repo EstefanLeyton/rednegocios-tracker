@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:52:24.572Z",
+  "updated_at": "2026-06-17T20:52:56.127Z",
   "state": {
     "1": {
       "status": "review",
@@ -19,7 +19,7 @@
       "note": ""
     },
     "5": {
-      "status": "progress",
+      "status": "review",
       "note": ""
     },
     "6": {
@@ -456,6 +456,13 @@
       "ts": "2026-06-17T20:52:24.572Z",
       "id": 4,
       "name": "GAP: Validación automática contra fuentes públicas",
+      "from": "progress",
+      "to": "review"
+    },
+    {
+      "ts": "2026-06-17T20:52:56.127Z",
+      "id": 9,
+      "name": "GAP-RDN-3 Registro diferenciado por tipo proveedor",
       "from": "progress",
       "to": "review"
     }
