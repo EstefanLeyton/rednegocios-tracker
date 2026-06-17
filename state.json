@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:08:14.122Z",
+  "updated_at": "2026-06-17T21:10:24.936Z",
   "state": {
     "1": {
       "status": "review",
@@ -388,7 +388,7 @@
     },
     "97": {
       "status": "queue",
-      "note": ""
+      "note": "falta detalle y parece tener dependencia"
     },
     "98": {
       "status": "queue",
@@ -596,6 +596,13 @@
       "ts": "2026-06-17T21:08:14.122Z",
       "id": 1031,
       "name": "GAP - Histórico segmentación (tendencias y proyecc",
+      "from": "queue",
+      "to": "queue"
+    },
+    {
+      "ts": "2026-06-17T21:10:24.935Z",
+      "id": 72,
+      "name": "GAP-RDN-40 Implementar alerta de Desviación",
       "from": "queue",
       "to": "queue"
     }
