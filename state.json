@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:58:50.540Z",
+  "updated_at": "2026-06-17T20:59:06.465Z",
   "state": {
     "1": {
       "status": "review",
@@ -123,7 +123,7 @@
       "note": ""
     },
     "31": {
-      "status": "progress",
+      "status": "queue",
       "note": ""
     },
     "32": {
@@ -549,6 +549,13 @@
       "name": "GAP - Verificación Financiera (Cálculos y Segmenta",
       "from": "queue",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-17T20:59:06.465Z",
+      "id": 42,
+      "name": "GAP - Verificación Financiera (Cálculos y Segmenta",
+      "from": "progress",
+      "to": "queue"
     }
   ]
 }
