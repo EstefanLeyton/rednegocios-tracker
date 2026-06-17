@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:12:27.675Z",
+  "updated_at": "2026-06-17T21:14:55.288Z",
   "state": {
     "1": {
       "status": "review",
@@ -219,7 +219,7 @@
       "note": ""
     },
     "55": {
-      "status": "queue",
+      "status": "review",
       "note": ""
     },
     "56": {
@@ -633,6 +633,13 @@
       "name": "GAP-RDN-32 Implementar monitoreo permanente",
       "from": "queue",
       "to": "dep"
+    },
+    {
+      "ts": "2026-06-17T21:14:55.288Z",
+      "id": 29,
+      "name": "GAP Visualizar estado de la inscripción blog traza",
+      "from": "queue",
+      "to": "review"
     }
   ]
 }
