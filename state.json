@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:59:06.465Z",
+  "updated_at": "2026-06-17T21:00:35.760Z",
   "state": {
     "1": {
       "status": "review",
@@ -127,8 +127,8 @@
       "note": ""
     },
     "32": {
-      "status": "queue",
-      "note": ""
+      "status": "blocked",
+      "note": "no hay detalle de objetivo"
     },
     "33": {
       "status": "progress",
@@ -556,6 +556,13 @@
       "name": "GAP - Verificación Financiera (Cálculos y Segmenta",
       "from": "progress",
       "to": "queue"
+    },
+    {
+      "ts": "2026-06-17T21:00:35.760Z",
+      "id": 63,
+      "name": "GAP-RDN-17 Integración Clave Tributaria",
+      "from": "queue",
+      "to": "blocked"
     }
   ]
 }
