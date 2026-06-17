@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:07:28.219Z",
+  "updated_at": "2026-06-17T21:08:14.122Z",
   "state": {
     "1": {
       "status": "review",
@@ -312,7 +312,7 @@
     },
     "78": {
       "status": "queue",
-      "note": ""
+      "note": "falta detalle "
     },
     "79": {
       "status": "queue",
@@ -591,6 +591,13 @@
       "name": "GAP Mandante - Visualización de todos sus proveedo",
       "from": "progress",
       "to": "review"
+    },
+    {
+      "ts": "2026-06-17T21:08:14.122Z",
+      "id": 1031,
+      "name": "GAP - Histórico segmentación (tendencias y proyecc",
+      "from": "queue",
+      "to": "queue"
     }
   ]
 }
