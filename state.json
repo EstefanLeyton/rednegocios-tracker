@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:56:53.133Z",
+  "updated_at": "2026-06-17T20:58:50.540Z",
   "state": {
     "1": {
       "status": "review",
@@ -123,7 +123,7 @@
       "note": ""
     },
     "31": {
-      "status": "queue",
+      "status": "progress",
       "note": ""
     },
     "32": {
@@ -542,6 +542,13 @@
       "name": "GAP-RDN-58 Actualización permanente mensual (input",
       "from": "progress",
       "to": "review"
+    },
+    {
+      "ts": "2026-06-17T20:58:50.540Z",
+      "id": 42,
+      "name": "GAP - Verificación Financiera (Cálculos y Segmenta",
+      "from": "queue",
+      "to": "progress"
     }
   ]
 }
