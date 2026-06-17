@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RedNegocios · Tracker de Hitos y GAPs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0e14;
+    --surface: #131620;
+    --surface2: #1a1e2e;
+    --border: #252a3d;
+    --border2: #2e3450;
+    --text: #e8eaf2;
+    --muted: #6b7194;
+    --accent: #4f6ef7;
+    --accent2: #7c3aed;
+
+    --h1: #3b82f6;
+    --h1-bg: rgba(59,130,246,0.1);
+    --h1-border: rgba(59,130,246,0.3);
+
+    --h2: #f59e0b;
+    --h2-bg: rgba(245,158,11,0.1);
+    --h2-border: rgba(245,158,11,0.3);
+
+    --h3: #10b981;
+    --h3-bg: rgba(16,185,129,0.1);
+    --h3-border: rgba(16,185,129,0.3);
+
+    --s-queue:    #64748b;
+    --s-progress: #3b82f6;
+    --s-done:     #10b981;
+    --s-blocked:  #ef4444;
+    --s-dep:      #f59e0b;
+    --s-review:   #a855f7;
+    --s-hold:     #6b7280;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,14,20,0.9);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    letter-spacing: -.02em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-badge {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-size: .65rem; font-weight: 700;
+    padding: 2px 7px; border-radius: 4px; letter-spacing: .06em;
+  }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .saved-indicator {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem; color: var(--muted);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .saved-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--s-done); }
+
+  /* ─── BUTTONS ─── */
+  .btn {
+    font-family: 'DM Sans', sans-serif; font-size: .78rem; font-weight: 500;
+    padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border2);
+    background: var(--surface2); color: var(--text); cursor: pointer;
+    transition: all .15s; white-space: nowrap;
+  }
+  .btn:hover { background: var(--border); border-color: var(--accent); color: #fff; }
+  .btn-danger { border-color: rgba(239,68,68,.3); color: #f87171; }
+  .btn-danger:hover { background: rgba(239,68,68,.1); border-color: #ef4444; color: #fca5a5; }
+  .btn-export { border-color: rgba(16,185,129,.3); color: #34d399; }
+  .btn-export:hover { background: rgba(16,185,129,.1); border-color: #10b981; }
+  .btn-primary { border-color: rgba(79,110,247,.5); color: #818cf8; background: rgba(79,110,247,.08); }
+  .btn-primary:hover { background: rgba(79,110,247,.18); border-color: var(--accent); color: #a5b4fc; }
+
+  /* ─── MAIN LAYOUT ─── */
+  main { max-width: 1300px; margin: 0 auto; padding: 28px 24px; }
+
+  /* ─── SUMMARY CARDS ─── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px; margin-bottom: 28px;
+  }
+  .summary-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+    transition: border-color .2s;
+  }
+  .summary-card:hover { border-color: var(--border2); }
+  .summary-card .sc-count {
+    font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;
+    line-height: 1;
+  }
+  .summary-card .sc-label { font-size: .7rem; color: var(--muted); font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+  .summary-card .sc-bar { height: 3px; border-radius: 2px; margin-top: 8px; background: var(--border); overflow: hidden; }
+  .summary-card .sc-fill { height: 100%; border-radius: 2px; transition: width .4s; }
+
+  /* ─── CONTROLS ─── */
+  .controls {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 24px; align-items: center;
+  }
+  .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 340px; }
+  .search-wrap input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: .78rem;
+    padding: 8px 12px 8px 34px; border-radius: 7px; outline: none;
+    transition: border-color .2s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap .si { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .8rem; pointer-events: none; }
+
+  select.filter-sel {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: .78rem;
+    padding: 8px 10px; border-radius: 7px; outline: none; cursor: pointer;
+    transition: border-color .2s;
+  }
+  select.filter-sel:focus { border-color: var(--accent); }
+
+  /* ─── HITO BLOCK ─── */
+  .hito-block { margin-bottom: 28px; }
+  .hito-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hito-tag {
+    font-family: 'Syne', sans-serif; font-size: .68rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 5px; letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .hito-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
+  .hito-desc { font-size: .78rem; color: var(--muted); margin-left: auto; text-align: right; }
+  .hito-progress-wrap { display: flex; align-items: center; gap: 10px; }
+  .hito-progress-bar { width: 80px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .hito-progress-fill { height: 100%; border-radius: 3px; transition: width .4s; }
+  .hito-pct { font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--muted); min-width: 32px; text-align: right; }
+
+  /* ─── CATEGORY GROUP ─── */
+  .cat-block { margin-bottom: 14px; }
+  .cat-title {
+    font-size: .68rem; font-weight: 600; color: var(--muted);
+    letter-spacing: .1em; text-transform: uppercase;
+    padding: 6px 0 8px 2px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cat-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ─── GAP ITEM ─── */
+  .gap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px; }
+  .gap-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 8px;
+    transition: border-color .2s, transform .15s, box-shadow .2s;
+    cursor: pointer; position: relative;
+  }
+  .gap-item:hover { border-color: var(--border2); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+  .gap-item.highlighted { border-color: var(--accent) !important; box-shadow: 0 0 0 1px var(--accent); }
+
+  .gap-top { display: flex; align-items: flex-start; gap: 8px; }
+  .gap-num {
+    font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--muted);
+    background: var(--surface2); padding: 2px 6px; border-radius: 4px;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .gap-name { font-size: .8rem; font-weight: 500; line-height: 1.4; flex: 1; }
+  .gap-name.done-text { text-decoration: line-through; color: var(--muted); }
+
+  .gap-bottom { display: flex; align-items: center; gap: 6px; justify-content: space-between; }
+  .status-badge {
+    font-size: .62rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+  }
+
+  /* Status colors */
+  .s-queue    { background: rgba(100,116,139,.15); color: #94a3b8; border: 1px solid rgba(100,116,139,.2); }
+  .s-progress { background: rgba(59,130,246,.15);  color: #60a5fa; border: 1px solid rgba(59,130,246,.2); }
+  .s-done     { background: rgba(16,185,129,.15);  color: #34d399; border: 1px solid rgba(16,185,129,.2); }
+  .s-blocked  { background: rgba(239,68,68,.15);   color: #f87171; border: 1px solid rgba(239,68,68,.2); }
+  .s-dep      { background: rgba(245,158,11,.15);  color: #fbbf24; border: 1px solid rgba(245,158,11,.2); }
+  .s-review   { background: rgba(168,85,247,.15);  color: #c084fc; border: 1px solid rgba(168,85,247,.2); }
+  .s-hold     { background: rgba(107,114,128,.15); color: #9ca3af; border: 1px solid rgba(107,114,128,.2); }
+
+  /* Hito colors applied to tags */
+  .h1-tag { background: var(--h1-bg); color: var(--h1); border: 1px solid var(--h1-border); }
+  .h2-tag { background: var(--h2-bg); color: var(--h2); border: 1px solid var(--h2-border); }
+  .h3-tag { background: var(--h3-bg); color: var(--h3); border: 1px solid var(--h3-border); }
+  .hito-progress-fill.h1 { background: var(--h1); }
+  .hito-progress-fill.h2 { background: var(--h2); }
+  .hito-progress-fill.h3 { background: var(--h3); }
+
+  /* Left border accent */
+  .gap-item::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 3px; border-radius: 0 2px 2px 0;
+    transition: background .2s;
+  }
+  .gap-item.s-queue::before    { background: var(--s-queue); }
+  .gap-item.s-progress::before { background: var(--s-progress); }
+  .gap-item.s-done::before     { background: var(--s-done); }
+  .gap-item.s-blocked::before  { background: var(--s-blocked); }
+  .gap-item.s-dep::before      { background: var(--s-dep); }
+  .gap-item.s-review::before   { background: var(--s-review); }
+  .gap-item.s-hold::before     { background: var(--s-hold); }
+
+  .gap-actions { display: flex; gap: 4px; }
+  .status-btn {
+    font-size: .6rem; padding: 2px 6px; border-radius: 3px;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--muted); cursor: pointer; transition: all .12s;
+  }
+  .status-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  /* ─── STATUS PICKER MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 12px; padding: 24px; width: 90%; max-width: 400px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.5);
+  }
+  .modal h3 { font-family: 'Syne', sans-serif; font-size: .95rem; margin-bottom: 4px; }
+  .modal .modal-sub { font-size: .75rem; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
+  .status-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .status-opt {
+    padding: 10px 12px; border-radius: 7px; cursor: pointer;
+    border: 1px solid var(--border); display: flex; align-items: center; gap: 8px;
+    transition: all .15s; font-size: .78rem; font-weight: 500;
+  }
+  .status-opt:hover { transform: translateY(-1px); }
+  .status-opt .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .note-area { margin-top: 14px; }
+  .note-area label { font-size: .72rem; color: var(--muted); display: block; margin-bottom: 5px; }
+  .note-area textarea {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: .78rem;
+    padding: 8px 10px; border-radius: 6px; resize: vertical; min-height: 64px;
+    outline: none; transition: border-color .15s;
+  }
+  .note-area textarea:focus { border-color: var(--accent); }
+  .modal-footer { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; }
+
+  /* ─── NOTE DISPLAY ─── */
+  .gap-note {
+    font-size: .72rem; color: var(--muted); background: var(--surface2);
+    border-radius: 4px; padding: 5px 8px; line-height: 1.4;
+    border-left: 2px solid var(--border2);
+  }
+
+  /* ─── MODO LECTOR / EDITOR ─── */
+  /* Tarea 3.2: ocultar controles de edición en modo lector */
+  body.reader .editor-only { display: none !important; }
+
+  /* Tarea 3.5: badge de modo en el header */
+  .mode-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 5px;
+    letter-spacing: .04em; white-space: nowrap;
+    display: flex; align-items: center; gap: 5px;
+  }
+  /* "Solo lectura" — fondo #374151 (gris oscuro), texto #f9fafb (blanco casi puro)
+     Contraste calculado: ~7.0:1 ✓ WCAG AA (≥4.5:1) */
+  .mode-badge.reader {
+    background: #374151;
+    color: #f9fafb;
+    border: 1px solid #4b5563;
+  }
+  /* "Modo editor" — fondo #065f46 (verde oscuro), texto #d1fae5 (verde claro)
+     Contraste calculado: ~7.1:1 ✓ WCAG AA (≥4.5:1) */
+  .mode-badge.editor-mode {
+    background: #065f46;
+    color: #d1fae5;
+    border: 1px solid #047857;
+  }
+
+  /* Botones de autenticación de modo */
+  .btn-connect  { border-color: rgba(59,130,246,.4); color: #93c5fd; }
+  .btn-connect:hover  { background: rgba(59,130,246,.1); border-color: #3b82f6; }
+  .btn-exit-edit { border-color: rgba(239,68,68,.3); color: #fca5a5; }
+  .btn-exit-edit:hover { background: rgba(239,68,68,.1); border-color: #ef4444; }
+
+  /* Timestamp de datos */
+  .data-timestamp {
+    font-family: 'DM Mono', monospace;
+    font-size: .68rem; color: var(--muted);
+  }
+
+  /* Banner de error de carga */
+  #load-error {
+    background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3);
+    border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+    font-size: .8rem; color: #fca5a5; display: none;
+    align-items: center; gap: 10px;
+  }
+  #load-error.visible { display: flex; }
+
+  /* ─── HIDDEN ─── */
+  .hidden { display: none !important; }
+
+  /* ─── EMPTY STATE ─── */
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-size: .85rem; }
+
+  /* ─── IMPORT/EXPORT panel ─── */
+  .io-area {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; margin-bottom: 24px; display: none;
+  }
+  .io-area.open { display: block; }
+  .io-area h4 { font-family: 'Syne', sans-serif; font-size: .85rem; margin-bottom: 8px; }
+  .io-area textarea {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: .68rem;
+    padding: 8px; border-radius: 6px; resize: vertical; min-height: 80px;
+    outline: none;
+  }
+  .io-footer { display: flex; gap: 8px; margin-top: 8px; }
+
+  /* ─── CHANGELOG ─── */
+  .changelog-entry {
+    font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--muted);
+    padding: 3px 0; border-bottom: 1px solid var(--border);
+  }
+  .changelog-entry span { color: var(--text); }
+  #changelog-panel { max-height: 240px; overflow-y: auto; margin-top: 10px; }
+
+  /* ─── SAVE FEEDBACK (Fase 4 — ADR-003) ─── */
+  #save-feedback {
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem; padding: 5px 12px; border-radius: 6px;
+    display: none; align-items: center; gap: 7px;
+    white-space: nowrap; transition: opacity .3s;
+  }
+  #save-feedback.loading {
+    display: flex;
+    background: rgba(79,110,247,.1); border: 1px solid rgba(79,110,247,.3);
+    color: #818cf8;
+  }
+  #save-feedback.success {
+    display: flex;
+    background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3);
+    color: #34d399;
+  }
+  #save-feedback.error {
+    display: flex;
+    background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3);
+    color: #f87171;
+  }
+  /* Spinner textual animado */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .fb-spinner {
+    display: inline-block;
+    animation: spin .8s linear infinite;
+    font-style: normal;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-badge">RDN</span>
+    RedNegocios · Tracker de Hitos
+  </div>
+  <div class="header-right">
+    <!-- Badge de modo (tarea 3.5) -->
+    <span id="mode-badge" class="mode-badge" aria-label="Modo de acceso actual"></span>
+    <!-- Timestamp de datos (tarea 2.3) -->
+    <span id="data-timestamp" class="data-timestamp"></span>
+    <!-- Botón conectar como editor (visible solo en modo lector) (tarea 3.4) -->
+    <button class="btn btn-connect" id="btn-connect" onclick="promptPat()" style="display:none">🔑 Conectar como editor</button>
+    <!-- Botón salir de edición (visible solo en modo editor) (tarea 3.4) -->
+    <button class="btn btn-exit-edit editor-only" id="btn-exit-edit" onclick="exitEditor()" style="display:none">Salir de edición</button>
+    <button class="btn" onclick="toggleChangelog()">📋 Historial</button>
+    <!-- Feedback de guardado con aria-live (Fase 4 — ADR-003, tarea 4.5) -->
+    <!-- class editor-only: se oculta en modo lector, no molesta al equipo -->
+    <div id="save-feedback" class="editor-only" aria-live="polite" aria-atomic="true"></div>
+    <!-- Botón Exportar Excel (Fase 7 — ADR-006, tarea 7.4): NO editor-only, funciona en ambos modos -->
+    <button class="btn btn-export" onclick="exportToExcel()">⬇ Exportar Excel</button>
+    <!-- Botón resetear: solo editor (tarea 3.2) -->
+    <button class="btn btn-danger editor-only" onclick="confirmReset()">↺ Resetear</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- Summary -->
+  <div class="summary-grid" id="summary-grid"></div>
+
+  <!-- Banner de error de carga (tarea 2.3) -->
+  <div id="load-error" role="alert">
+    <span style="font-size:1.1rem">⚠️</span>
+    <span id="load-error-msg" style="flex:1">No se pudo cargar el estado del tablero.</span>
+    <button onclick="loadState()" style="background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:#fca5a5;padding:4px 10px;border-radius:5px;cursor:pointer;font-size:.75rem;">Reintentar</button>
+  </div>
+
+  <!-- Changelog panel -->
+  <div class="io-area" id="changelog-panel-wrap">
+    <h4>Historial de cambios</h4>
+    <div id="changelog-panel"></div>
+    <div class="io-footer" style="margin-top:8px;">
+      <button class="btn btn-danger" onclick="clearChangelog()">Limpiar historial</button>
+      <button class="btn" onclick="document.getElementById('changelog-panel-wrap').classList.remove('open')">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="si">🔍</span>
+      <input type="text" id="search-input" placeholder="Buscar GAP...">
+    </div>
+    <select class="filter-sel" id="filter-hito">
+      <option value="">Todos los Hitos</option>
+      <option value="Hito 1">Hito 1</option>
+      <option value="Hito 2">Hito 2</option>
+      <option value="Hito 3">Hito 3</option>
+    </select>
+    <select class="filter-sel" id="filter-status">
+      <option value="">Todos los Estados</option>
+      <option value="queue">En Cola</option>
+      <option value="progress">En Curso</option>
+      <option value="done">Terminado</option>
+      <option value="blocked">Bloqueado</option>
+      <option value="dep">Con Dependencia</option>
+      <option value="review">En Revisión</option>
+      <option value="hold">En Pausa</option>
+    </select>
+  </div>
+
+  <!-- Items -->
+  <div id="items-container"></div>
+  <div class="empty hidden" id="empty-msg">No se encontraron GAPs con los filtros aplicados.</div>
+
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <h3 id="modal-title">Cambiar Estado</h3>
+    <p class="modal-sub" id="modal-sub"></p>
+    <div class="status-options">
+      <div class="status-opt s-queue"    onclick="setStatus('queue')"   ><span class="dot" style="background:var(--s-queue)"></span>En Cola</div>
+      <div class="status-opt s-progress" onclick="setStatus('progress')"><span class="dot" style="background:var(--s-progress)"></span>En Curso</div>
+      <div class="status-opt s-done"     onclick="setStatus('done')"    ><span class="dot" style="background:var(--s-done)"></span>Terminado</div>
+      <div class="status-opt s-blocked"  onclick="setStatus('blocked')" ><span class="dot" style="background:var(--s-blocked)"></span>Bloqueado</div>
+      <div class="status-opt s-dep"      onclick="setStatus('dep')"     ><span class="dot" style="background:var(--s-dep)"></span>Con Dependencia</div>
+      <div class="status-opt s-review"   onclick="setStatus('review')"  ><span class="dot" style="background:var(--s-review)"></span>En Revisión</div>
+      <div class="status-opt s-hold"     onclick="setStatus('hold')"    ><span class="dot" style="background:var(--s-hold)"></span>En Pausa</div>
+    </div>
+    <div class="note-area">
+      <label>Nota / Comentario (opcional)</label>
+      <textarea id="modal-note" placeholder="Ej: Bloqueado por espera de credenciales SII…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <!-- Botón guardar: habilitado en Fase 4 (escritura vía Contents API — ADR-003) -->
+      <button class="btn btn-primary editor-only" id="btn-save-status" onclick="saveChange()" disabled style="opacity:.5;cursor:not-allowed">Guardar</button>
+      <button class="btn" onclick="document.getElementById('modal').classList.remove('open')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const GAPS = [
+  // HITO 1 — Onboarding y Registro
+  {id:1,  hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP: Validación de campos obligatorios según modalidad'},
+  {id:3,  hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP: Ficha Bancaria Digital'},
+  {id:4,  hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP: Validación automática contra fuentes públicas'},
+  {id:8,  hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP Automatizar Gestión de proveedores de mercados Emergentes'},
+  {id:9,  hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP-RDN-3 Registro diferenciado por tipo proveedor'},
+  {id:10, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP: Definir tipos de proveedores y flujos de registro diferenciadas'},
+  {id:13, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP-RDN-16 Integración DOE'},
+  {id:14, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP-RDN-18 Integración Gesintel'},
+  {id:16, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP: Permitir acceso a la DJ a distintos tipos de empresas'},
+  {id:17, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP: Firma electrónica de la Declaración Jurada'},
+  {id:20, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP-RDN-27 Ficha Bancaria digital con firma'},
+  {id:21, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP-RDN-26 Declaración Jurada - fórmula'},
+  {id:23, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP-RDN-13 Validaciones automáticas DESDE EL REGISTRO'},
+  {id:24, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP-RDN-5 Upgrade módulo ADMINISTRACIÓN'},
+  {id:27, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP: Lógica de conversión de proveedor VCO a estándar'},
+  {id:28, hito:'Hito 1', cat:'Onboarding y Registro',     name:'GAP Sistema de guardado automático en inscripción'},
+  // HITO 1 — Motor de Evaluación I
+  {id:2,  hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP Automatizar cálculos del ranking (SAP Codelco)'},
+  {id:5,  hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP Evaluaciones con PDF e históricas sin PDF'},
+  {id:6,  hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP Seguimiento de actividades post evaluación'},
+  {id:7,  hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP Cargar evidencias a la evaluación'},
+  {id:11, hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP Auditoría de modificaciones en contratos realizados'},
+  {id:12, hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP Disponer de Múltiples evaluadores de Aspectos'},
+  {id:15, hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP Disponer de Múltiples evaluadores'},
+  {id:25, hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP-RDN-58 Actualización permanente mensual (input desempeño)'},
+  {id:26, hito:'Hito 1', cat:'Motor de Evaluación I',     name:'GAP-RDN-57 Upgrade al módulo de evaluación'},
+  // HITO 1 — Infraestructura y Seguridad
+  {id:18, hito:'Hito 1', cat:'Infraestructura y Seguridad',name:'GAP-RDN-1 Actualización modelo de datos'},
+  {id:19, hito:'Hito 1', cat:'Infraestructura y Seguridad',name:'GAP-RDN-28 Doble factor de Autenticación (2FA)'},
+  {id:22, hito:'Hito 1', cat:'Infraestructura y Seguridad',name:'GAP-RDN-19 Generación de base para visualización'},
+  // HITO 2 — Validaciones automatizadas
+  {id:32, hito:'Hito 2', cat:'Validaciones automatizadas (Riesgo y Cumplimiento)', name:'GAP Integraciones fuentes externas (CT, TGR, DOE, Compliance)'},
+  {id:39, hito:'Hito 2', cat:'Validaciones automatizadas (Riesgo y Cumplimiento)', name:'GAP Análisis Financiero automático (LECTURA BALANCES)'},
+  {id:42, hito:'Hito 2', cat:'Validaciones automatizadas (Riesgo y Cumplimiento)', name:'GAP - Verificación Financiera (Cálculos y Segmentación)'},
+  {id:63, hito:'Hito 2', cat:'Validaciones automatizadas (Riesgo y Cumplimiento)', name:'GAP-RDN-17 Integración Clave Tributaria'},
+  {id:69, hito:'Hito 2', cat:'Validaciones automatizadas (Riesgo y Cumplimiento)', name:'GAP-RDN-2 Desarrollo ETL - Histórico'},
+  {id:103,hito:'Hito 2', cat:'Validaciones automatizadas (Riesgo y Cumplimiento)', name:'GAP - Histórico segmentación (tendencias y proyecciones)'},
+  // HITO 2 — Inteligencia y Procesos
+  {id:35, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP-RDN-11 IA selección y validación categorías'},
+  {id:36, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP Acreditación de documentos (evaluación automática)'},
+  {id:37, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP Uso de LLM para automatizar acreditación de documentos'},
+  {id:38, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP Automatizar Análisis Legal Detallado (IA)'},
+  {id:43, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP Análisis de Cumplimiento Estándar (COMPLIANCE)'},
+  {id:46, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP Automatizar el cálculo de segmentación en formulario'},
+  {id:49, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP: Asignación automática de segmento'},
+  {id:53, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP: Asistente Virtual con LLM apoyo proceso completo'},
+  {id:54, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP - Ayuda al usuario en selección categorías con LLM'},
+  {id:55, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP: Agente IA para selección de categorías'},
+  {id:66, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP-RDN-12 IA acreditación de experiencia'},
+  {id:75, hito:'Hito 2', cat:'Inteligencia y Procesos',   name:'GAP-RDN-10 IA - ACREDITACION 1 NIVEL'},
+  // HITO 2 — Gestión Operativa y SAP
+  {id:31, hito:'Hito 2', cat:'Gestión Operativa y SAP',   name:'GAP Integración Descargar contactos de SAP HANA para RDN'},
+  {id:47, hito:'Hito 2', cat:'Gestión Operativa y SAP',   name:'GAP: Cargar y administrar bloqueos y sanciones en plataforma'},
+  {id:48, hito:'Hito 2', cat:'Gestión Operativa y SAP',   name:'GAP Mantenimiento homologado de categorías (SAP Hana/Ariba)'},
+  {id:50, hito:'Hito 2', cat:'Gestión Operativa y SAP',   name:'GAP Hacer un mantenedor en plataforma (evitar planillas)'},
+  {id:59, hito:'Hito 2', cat:'Gestión Operativa y SAP',   name:'GAP-RDN-31 Módulo de Contactabilidad GESTOR'},
+  {id:68, hito:'Hito 2', cat:'Gestión Operativa y SAP',   name:'GAP-RDN-4 Desarrollo Módulo administración de marcas SAP'},
+  {id:71, hito:'Hito 2', cat:'Gestión Operativa y SAP',   name:'GAP-RDN-56 Implementar formulario de Contacto'},
+  {id:100,hito:'Hito 2', cat:'Gestión Operativa y SAP',   name:'GAP-RDN-59 Gestión Contactos ARIBA (VISTA CONTACTOS)'},
+  // HITO 2 — Control y Trazabilidad
+  {id:29, hito:'Hito 2', cat:'Control y Trazabilidad',    name:'GAP Visualizar estado de la inscripción blog trazabilidad fuentes'},
+  {id:45, hito:'Hito 2', cat:'Control y Trazabilidad',    name:'GAP: Logs de auditoría completos DJ'},
+  {id:51, hito:'Hito 2', cat:'Control y Trazabilidad',    name:'GAP Pentaho - Reporte de advertencia semanal batchs'},
+  {id:52, hito:'Hito 2', cat:'Control y Trazabilidad',    name:'GAP: Consulta de estado de la DJ de cara al mandante'},
+  {id:60, hito:'Hito 2', cat:'Control y Trazabilidad',    name:'GAP-RDN-29 Generación de Bitácora Documental (TRAZABILIDAD)'},
+  {id:67, hito:'Hito 2', cat:'Control y Trazabilidad',    name:'GAP-RDN-6 Acreditación de representantes legales'},
+  {id:70, hito:'Hito 2', cat:'Control y Trazabilidad',    name:'GAP- RDN 4 Manejo excepciones-trazabilidad (Autorizaciones)'},
+  {id:74, hito:'Hito 2', cat:'Control y Trazabilidad',    name:'GAP-RDN-38 Tabulación de Verificaciones en Terreno'},
+  // HITO 2 — Ecosistema y Visibilidad
+  {id:30, hito:'Hito 2', cat:'Ecosistema y Visibilidad',  name:'GAP Módulo de Alertas y Notificaciones'},
+  {id:33, hito:'Hito 2', cat:'Ecosistema y Visibilidad',  name:'GAP Indicadores de la OTIF (FICHA PROVEEDOR)'},
+  {id:34, hito:'Hito 2', cat:'Ecosistema y Visibilidad',  name:'GAP Mostrar info del proveedor en pauta evaluación (FICHA)'},
+  {id:40, hito:'Hito 2', cat:'Ecosistema y Visibilidad',  name:'GAP Integración con LMS (ACADEMIA)'},
+  {id:41, hito:'Hito 2', cat:'Ecosistema y Visibilidad',  name:'GAP Plataforma de Elearning externa a RDN (SSO)'},
+  {id:44, hito:'Hito 2', cat:'Ecosistema y Visibilidad',  name:'GAP Seguimiento de la notificación'},
+  {id:76, hito:'Hito 2', cat:'Ecosistema y Visibilidad',  name:'GAP-RDN-55 Módulo de seguimiento y control de capacitaciones'},
+  // HITO 2 — Ranking Vista Proveedor
+  {id:103+1, hito:'Hito 2', id:104, cat:'Ranking (Vista Proveedor)', name:'GAP-RDN-59 Histórico segmentación vista proveedor'},
+  // (fix: reuse actual id)
+  // HITO 3 — Gobernanza 360
+  {id:80, hito:'Hito 3', cat:'Gobernanza 360',            name:'GAP Mandante - Visualización de todos sus proveedores'},
+  {id:81, hito:'Hito 3', cat:'Gobernanza 360',            name:'GAP: Monitorear a Proveedores no Vigentes'},
+  {id:85, hito:'Hito 3', cat:'Gobernanza 360',            name:'GAP Buscador avanzado mandante (PowerBI)'},
+  {id:86, hito:'Hito 3', cat:'Gobernanza 360',            name:'GAP Mandante - Visualizar cumplimiento proveedor(es)'},
+  {id:89, hito:'Hito 3', cat:'Gobernanza 360',            name:'GAP Proveedor - Visualización 360 indicadores Mandante'},
+  {id:91, hito:'Hito 3', cat:'Gobernanza 360',            name:'GAP: Matriz de costos x modalidad'},
+  {id:95, hito:'Hito 3', cat:'Gobernanza 360',            name:'GAP-RDN-21 Implementación Ficha 360'},
+  {id:103,hito:'Hito 3', id:1031, cat:'Gobernanza 360',   name:'GAP - Histórico segmentación (tendencias y proyecciones)'},
+  // HITO 3 — Experiencia de Usuario
+  {id:56, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP-1 Proceso Guiado en el registro y permanencia (SOP)'},
+  {id:57, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP Mostrar las alertas en el panel de proveedor'},
+  {id:61, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP-RDN-25 Alertas de SEGMENTACIÓN al proveedor'},
+  {id:82, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP Alerta al proveedor: pérdida de segmentación'},
+  {id:83, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP-2 La plataforma debe soportar español e inglés'},
+  {id:84, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP Proveedor Mejorar usabilidad cumplimiento documental'},
+  {id:90, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP Programa de incorporación proveedores (SOP)'},
+  {id:92, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP Declaración en idioma inglés'},
+  {id:97, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP-RDN-9 Incorporación de cápsulas de ayuda'},
+  {id:98, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP-RDN-8 Incorporación de cápsulas de ayuda'},
+  {id:99, hito:'Hito 3', cat:'Experiencia de Usuario',    name:'GAP-RDN-7 Bilingüismo - Front End'},
+  // HITO 3 — Seguridad y Privacidad
+  {id:87, hito:'Hito 3', cat:'Seguridad y Privacidad',    name:'GAP: Auditorías especiales Codelco (ROLES Y PERFILES)'},
+  {id:88, hito:'Hito 3', cat:'Seguridad y Privacidad',    name:'GAP: Carga de resultados informes Codelco (Solo ROL)'},
+  {id:94, hito:'Hito 3', cat:'Seguridad y Privacidad',    name:'GAP-RDN-24 Diseño manejo consentimiento datos personales'},
+  // HITO 3 — Cierre de Módulos
+  {id:58, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP: Alertas de discrepancias vs fuente externa'},
+  {id:62, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-22 Desarrollo alertas de completitud documental'},
+  {id:64, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-15 Generación de alertas automáticas'},
+  {id:65, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-14 Generación de alertas automáticas'},
+  {id:72, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-40 Implementar alerta de Desviación'},
+  {id:73, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-39 Implementar Certificación de concordancia'},
+  {id:77, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-36 Desarrollo nuevo panel de alertas'},
+  {id:78, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-34 Generación de alertas por pérdida'},
+  {id:79, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-33 Generación de alertas de cumplimiento'},
+  {id:93, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-30 Desarrollo Dashboard de cumplimiento'},
+  {id:96, hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-20 Desarrollo Dashboard de cumplimiento'},
+  {id:101,hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-37 Desarrollo nuevo panel de cumplimiento y alertas'},
+  {id:102,hito:'Hito 3', cat:'Cierre de Módulos (Completitud)', name:'GAP-RDN-32 Implementar monitoreo permanente'},
+];
+
+// Dedup by unique key
+const seenKeys = new Set();
+const DATA = [];
+GAPS.forEach(g => {
+  const key = g.hito + '|' + g.cat + '|' + g.name;
+  if (!seenKeys.has(key)) { seenKeys.add(key); DATA.push(g); }
+});
+// Assign unique stable ids
+DATA.forEach((g, i) => { g.uid = i + 1; });
+
+const STATUS_LABELS = {
+  queue: 'En Cola', progress: 'En Curso', done: 'Terminado',
+  blocked: 'Bloqueado', dep: 'Con Dependencia', review: 'En Revisión', hold: 'En Pausa'
+};
+const HITO_CLASS = { 'Hito 1': 'h1-tag', 'Hito 2': 'h2-tag', 'Hito 3': 'h3-tag' };
+const HITO_COLOR_VAR = { 'Hito 1': '--h1', 'Hito 2': '--h2', 'Hito 3': '--h3' };
+
+// ─── CONSTANTES GITHUB (tarea 2.2) ───────────────────────────────────────
+const OWNER  = 'EstefanLeyton';
+const REPO   = 'rednegocios-tracker';
+const BRANCH = 'main';
+const STATE_RAW_URL = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/state.json`;
+
+// ─── MODO LECTOR / EDITOR (tarea 3.1) ────────────────────────────────────
+const isEditor = !!localStorage.getItem('rdn_pat');
+document.body.classList.add(isEditor ? 'editor' : 'reader');
+
+// ─── STATE ────────────────────────────────────────────────────────────────
+let state     = {}; // uid → { status, note }
+let changelog = [];
+let updatedAt = null; // ISO string del state.json
+
+function getStatus(uid) { return (state[uid] && state[uid].status) || 'queue'; }
+function getNote(uid)   { return (state[uid] && state[uid].note)   || ''; }
+
+// Tarea 2.3: loadState async desde raw.githubusercontent.com
+async function loadState() {
+  const errEl  = document.getElementById('load-error');
+  const msgEl  = document.getElementById('load-error-msg');
+  errEl.classList.remove('visible');
+
+  let data = null;
+
+  // Intento 1: raw URL con cache-busting
+  try {
+    const res = await fetch(`${STATE_RAW_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    if (res.ok) {
+      data = await res.json();
+    }
+  } catch(e) { /* ignorar, intentar fallback */ }
+
+  // Intento 2: Contents API (fallback sin auth)
+  if (!data) {
+    try {
+      const contentsUrl = `https://api.github.com/repos/${OWNER}/${REPO}/contents/state.json`;
+      const res = await fetch(contentsUrl, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+      if (res.ok) {
+        const json = await res.json();
+        const decoded = atob(json.content.replace(/\n/g, ''));
+        data = JSON.parse(decoded);
+      }
+    } catch(e) { /* ambos fallaron */ }
+  }
+
+  if (data && data.state) {
+    state     = data.state;
+    changelog = Array.isArray(data.changelog) ? data.changelog : [];
+    updatedAt = data.updated_at || null;
+    actualizarTimestamp();
+    renderAll();
+  } else {
+    // Ambos fallaron: mostrar error visible, no pantalla en blanco
+    msgEl.textContent = 'No se pudo cargar el estado del tablero. Verificá tu conexión o intentá de nuevo.';
+    errEl.classList.add('visible');
+    // Si ya había estado en memoria, se mantiene (renderAll con lo que hay)
+    renderAll();
+  }
+}
+
+function actualizarTimestamp() {
+  const el = document.getElementById('data-timestamp');
+  if (!el) return;
+  if (updatedAt) {
+    const d = new Date(updatedAt);
+    el.textContent = 'Datos al: ' + d.toLocaleString('es-CL', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  } else {
+    el.textContent = '';
+  }
+}
+
+// ─── GITHUB CONTENTS API — FASE 4 (ADR-003) ─────────────────────────────
+
+/**
+ * toBase64Utf8: convierte un string UTF-8 arbitrario a base64 seguro.
+ * Necesario porque btoa() nativo lanza error con caracteres fuera de Latin-1
+ * (tildes, ñ, etc.). Verificación mental: toBase64Utf8('Revisión') debe
+ * round-trip correctamente vía decodeURIComponent(escape(atob(...))).
+ */
+function toBase64Utf8(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+/**
+ * getSha(): GET a Contents API para obtener el sha actual y el estado fresco.
+ * Retorna { sha, freshState } donde freshState es el objeto JSON parseado.
+ * IMPORTANTE: siempre refrescamos el estado desde GitHub antes de mutar,
+ * para no pisar cambios hechos desde otro dispositivo del editor.
+ */
+async function getSha() {
+  const pat = localStorage.getItem('rdn_pat');
+  const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/state.json`;
+  const res = await fetch(url, {
+    headers: {
+      'Authorization': `token ${pat}`,
+      'Accept': 'application/vnd.github+json'
+    }
+  });
+  if (!res.ok) {
+    const err = new Error(`HTTP ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
+  const json = await res.json();
+  const sha  = json.sha;
+  // Decodificar content (base64 con saltos de línea que GitHub agrega)
+  const decoded     = decodeURIComponent(escape(atob(json.content.replace(/\n/g, ''))));
+  const freshState  = JSON.parse(decoded);
+  return { sha, freshState };
+}
+
+/**
+ * putState(sha, payload): PUT a Contents API.
+ * Serializa payload → JSON → base64 UTF-8-safe y sube con el sha dado.
+ * Retorna el nuevo sha de la respuesta para cachear y evitar un GET extra.
+ * commitMsg se genera externamente para incluir contexto del cambio.
+ */
+async function putState(sha, payload, commitMsg) {
+  const pat  = localStorage.getItem('rdn_pat');
+  const url  = `https://api.github.com/repos/${OWNER}/${REPO}/contents/state.json`;
+  const json = JSON.stringify(payload, null, 2);
+  const b64  = toBase64Utf8(json);
+  const res  = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${pat}`,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ message: commitMsg, content: b64, sha: sha })
+  });
+  if (!res.ok) {
+    const err = new Error(`HTTP ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
+  const data = await res.json();
+  return data.content.sha; // sha nuevo — cachear para el próximo PUT
+}
+
+// sha cacheado para evitar un GET extra tras cada PUT exitoso
+let cachedSha = null;
+
+/**
+ * showFeedback(state, msg): controla el contenedor #save-feedback.
+ * state: 'loading' | 'success' | 'error' | 'hide'
+ * En SUCCESS se auto-oculta a los 4s.
+ */
+function showFeedback(fbState, msg) {
+  const el = document.getElementById('save-feedback');
+  if (!el) return;
+  el.className = 'editor-only'; // reset clases de estado
+  clearTimeout(el._autoHide);
+
+  if (fbState === 'hide') { el.style.display = 'none'; return; }
+
+  if (fbState === 'loading') {
+    el.className = 'editor-only loading';
+    el.innerHTML = '<i class="fb-spinner" aria-hidden="true">⟳</i> ' + (msg || 'Guardando…');
+  } else if (fbState === 'success') {
+    el.className = 'editor-only success';
+    const hora = new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    el.textContent = '✓ Guardado · ' + hora;
+    el._autoHide = setTimeout(() => { el.className = 'editor-only'; el.textContent = ''; }, 4000);
+  } else if (fbState === 'error') {
+    el.className = 'editor-only error';
+    el.textContent = '✗ ' + (msg || 'Error al guardar');
+  }
+}
+
+/**
+ * saveChange(): orquesta LOADING → getSha → mutar fresco → changelog → putState → SUCCESS/ERROR.
+ * Es la función que llama el botón Guardar del modal (Fase 4 + Fase 6 combinadas — ADR-003 + ADR-005).
+ */
+async function saveChange() {
+  if (!activeUid || !isEditor || !pendingStatus) return;
+
+  const uid      = activeUid;
+  const newStatus = pendingStatus;
+  const newNote   = document.getElementById('modal-note').value;
+  const g         = DATA.find(x => x.uid === uid);
+  const oldStatus = getStatus(uid);
+
+  // Deshabilitar botón guardar durante la operación
+  const btnSave = document.getElementById('btn-save-status');
+  if (btnSave) { btnSave.disabled = true; btnSave.style.opacity = '.5'; }
+  showFeedback('loading');
+
+  const commitMsg = `chore: GAP #${g.id} ${oldStatus}→${newStatus}`;
+
+  try {
+    // 4.4 paso 2: GET estado fresco + sha
+    let { sha, freshState } = await getSha();
+
+    // 4.4 paso 3: merge — aplicar el cambio del modal sobre el estado fresco
+    if (!freshState.state) freshState.state = {};
+    freshState.state[String(uid)] = { status: newStatus, note: newNote };
+
+    // 6.1: appendear entrada al changelog ANTES del PUT (queda en el mismo commit)
+    const entry = {
+      ts:   new Date().toISOString(),
+      id:   g.id,
+      name: g.name.substring(0, 50),
+      from: oldStatus,
+      to:   newStatus
+    };
+    freshState.changelog = [...(freshState.changelog || []), entry].slice(-200);
+
+    // 4.4 paso 5: actualizar updated_at
+    freshState.updated_at = new Date().toISOString();
+
+    // 4.4 paso 6: PUT
+    let newSha;
+    try {
+      newSha = await putState(sha, freshState, commitMsg);
+    } catch (putErr) {
+      // 4.6: manejo de 409 — sha desactualizado → reintento automático x1
+      if (putErr.status === 409) {
+        const retry = await getSha();
+        retry.freshState.state[String(uid)] = { status: newStatus, note: newNote };
+        retry.freshState.changelog = [...(retry.freshState.changelog || []), entry].slice(-200);
+        retry.freshState.updated_at = freshState.updated_at;
+        newSha = await putState(retry.sha, retry.freshState, commitMsg);
+        freshState = retry.freshState;
+      } else {
+        throw putErr;
+      }
+    }
+
+    // 4.4 paso 7: cachear sha nuevo
+    cachedSha = newSha;
+
+    // 4.4 paso 8: actualizar estado local con el estado fresco confirmado
+    state     = freshState.state;
+    changelog = Array.isArray(freshState.changelog) ? freshState.changelog : [];
+    updatedAt = freshState.updated_at;
+    actualizarTimestamp();
+
+    // 4.4 paso 9: SUCCESS + cerrar modal + re-render
+    showFeedback('success');
+    document.getElementById('modal').classList.remove('open');
+    renderAll();
+
+  } catch (err) {
+    // 4.6: manejo de errores por código HTTP
+    let msg;
+    if (err.status === 401) {
+      msg = 'Token inválido o expirado. Reingresá tu PAT.';
+      showFeedback('error', msg);
+      setTimeout(() => promptPat(), 800);
+    } else if (err.status === 403) {
+      msg = 'Límite o permisos insuficientes en GitHub. Verificá el PAT.';
+      showFeedback('error', msg);
+    } else if (err.status === 409) {
+      msg = 'El archivo cambió mientras guardabas. Recargá la página.';
+      showFeedback('error', msg);
+    } else {
+      msg = 'No se pudo guardar (red). Reintentá más tarde.';
+      showFeedback('error', msg);
+    }
+    // El estado en memoria NO se modifica ante error — se conserva el valor anterior
+    if (btnSave) { btnSave.disabled = false; btnSave.style.opacity = '1'; }
+    return;
+  }
+
+  // Re-habilitar botón para próxima operación
+  if (btnSave) { btnSave.disabled = false; btnSave.style.opacity = '1'; }
+}
+
+// ─── MODAL ────────────────────────────────────────────────────────────────
+let activeUid    = null;
+let pendingStatus = null;
+
+function openModal(uid) {
+  // Tarea 3.3: solo editores pueden abrir el modal
+  if (!isEditor) return;
+  activeUid = uid;
+  pendingStatus = null;
+  const g = DATA.find(x => x.uid === uid);
+  document.getElementById('modal-title').textContent = 'Cambiar Estado · GAP #' + g.id;
+  document.getElementById('modal-sub').textContent = g.name;
+  document.getElementById('modal-note').value = getNote(uid);
+
+  // Resetear feedback visual al abrir
+  showFeedback('hide');
+
+  // Resetear botón guardar a disabled hasta que se seleccione un status
+  const btnSave = document.getElementById('btn-save-status');
+  if (btnSave) { btnSave.disabled = true; btnSave.style.opacity = '.5'; }
+
+  // Resetear opacidad de opciones
+  document.querySelectorAll('.status-opt').forEach(el => el.style.opacity = '1');
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) {
+    document.getElementById('modal').classList.remove('open');
+  }
+}
+
+/**
+ * setStatus(status): registra la selección visual del usuario en el modal.
+ * Habilita el botón Guardar. El PUT real ocurre en saveChange().
+ */
+function setStatus(status) {
+  if (!activeUid || !isEditor) return;
+  pendingStatus = status;
+  // Resaltar opción seleccionada
+  document.querySelectorAll('.status-opt').forEach(el => el.style.opacity = '0.5');
+  if (event && event.currentTarget) event.currentTarget.style.opacity = '1';
+  // Habilitar botón guardar — Fase 4 ya está cableada
+  const btnSave = document.getElementById('btn-save-status');
+  if (btnSave) { btnSave.disabled = false; btnSave.style.opacity = '1'; }
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────
+function renderAll() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const filterHito = document.getElementById('filter-hito').value;
+  const filterStatus = document.getElementById('filter-status').value;
+
+  const container = document.getElementById('items-container');
+  container.innerHTML = '';
+
+  // Group by hito → cat
+  const hitos = ['Hito 1', 'Hito 2', 'Hito 3'];
+  let totalVisible = 0;
+
+  hitos.forEach(hito => {
+    const hitoData = DATA.filter(g => g.hito === hito);
+    if (filterHito && filterHito !== hito) return;
+
+    // Get visible items for this hito
+    const visible = hitoData.filter(g => {
+      const st = getStatus(g.uid);
+      if (filterStatus && st !== filterStatus) return false;
+      if (search && !g.name.toLowerCase().includes(search) && !g.cat.toLowerCase().includes(search)) return false;
+      return true;
+    });
+    if (!visible.length) return;
+    totalVisible += visible.length;
+
+    // Progress
+    const doneCount = hitoData.filter(g => getStatus(g.uid) === 'done').length;
+    const pct = Math.round(doneCount / hitoData.length * 100);
+    const hClass = HITO_CLASS[hito];
+    const hColorVar = HITO_COLOR_VAR[hito];
+    const labels = { 'Hito 1':'Cimientos y Validación', 'Hito 2':'Automatización y Gestión Avanzada', 'Hito 3':'Consolidación y Gobernanza 360' };
+
+    const hitoBlock = document.createElement('div');
+    hitoBlock.className = 'hito-block';
+    hitoBlock.innerHTML = `
+      <div class="hito-header">
+        <span class="hito-tag ${hClass}">${hito}</span>
+        <span class="hito-title">${labels[hito]}</span>
+        <div class="hito-progress-wrap" style="margin-left:auto">
+          <div class="hito-progress-bar"><div class="hito-progress-fill ${hito.replace(' ','').toLowerCase()}" style="width:${pct}%;background:var(${hColorVar})"></div></div>
+          <span class="hito-pct">${pct}%</span>
+        </div>
+      </div>`;
+
+    // Group by cat
+    const cats = [...new Set(hitoData.map(g => g.cat))];
+    cats.forEach(cat => {
+      const catItems = visible.filter(g => g.cat === cat);
+      if (!catItems.length) return;
+      const catBlock = document.createElement('div');
+      catBlock.className = 'cat-block';
+      catBlock.innerHTML = `<div class="cat-title">${cat}</div>`;
+      const grid = document.createElement('div');
+      grid.className = 'gap-grid';
+      catItems.forEach(g => {
+        const st   = getStatus(g.uid);
+        const note = getNote(g.uid);
+        const card = document.createElement('div');
+        card.className = `gap-item s-${st}`;
+
+        // Estructura base sin la nota (se agrega abajo con textContent — tarea 5.1)
+        card.innerHTML = `
+          <div class="gap-top">
+            <span class="gap-num">#${g.id}</span>
+            <span class="gap-name ${st==='done'?'done-text':''}">${g.name}</span>
+          </div>
+          <div class="gap-bottom">
+            <span class="status-badge s-${st}">${STATUS_LABELS[st]}</span>
+            <button class="status-btn editor-only" onclick="event.stopPropagation();openModal(${g.uid})">✎ Cambiar</button>
+          </div>`;
+
+        // Tarea 5.1: inyectar nota con textContent (sin innerHTML) para prevenir XSS
+        if (note) {
+          const noteEl = document.createElement('div');
+          noteEl.className = 'gap-note';
+          noteEl.textContent = note; // ← .textContent, nunca innerHTML con datos de usuario
+          // Insertar antes del gap-bottom
+          const gapBottom = card.querySelector('.gap-bottom');
+          card.insertBefore(noteEl, gapBottom);
+        }
+
+        // Tarea 3.3: solo editores abren el modal al hacer clic en la card
+        if (isEditor) {
+          card.onclick = () => openModal(g.uid);
+        } else {
+          card.style.cursor = 'default';
+        }
+
+        grid.appendChild(card);
+      });
+      catBlock.appendChild(grid);
+      hitoBlock.appendChild(catBlock);
+    });
+
+    container.appendChild(hitoBlock);
+  });
+
+  // Empty state
+  document.getElementById('empty-msg').classList.toggle('hidden', totalVisible > 0);
+
+  renderSummary();
+}
+
+function renderSummary() {
+  const statuses = ['queue','progress','done','blocked','dep','review','hold'];
+  const colors = { queue:'#64748b', progress:'#3b82f6', done:'#10b981', blocked:'#ef4444', dep:'#f59e0b', review:'#a855f7', hold:'#6b7280' };
+  const total = DATA.length;
+  const counts = {};
+  statuses.forEach(s => { counts[s] = DATA.filter(g => getStatus(g.uid) === s).length; });
+
+  const grid = document.getElementById('summary-grid');
+  grid.innerHTML = `
+    <div class="summary-card">
+      <span class="sc-count" style="color:var(--text)">${total}</span>
+      <span class="sc-label">Total GAPs</span>
+      <div class="sc-bar"><div class="sc-fill" style="width:100%;background:var(--border2)"></div></div>
+    </div>
+    ${statuses.map(s => `
+    <div class="summary-card">
+      <span class="sc-count" style="color:${colors[s]}">${counts[s]}</span>
+      <span class="sc-label">${STATUS_LABELS[s]}</span>
+      <div class="sc-bar"><div class="sc-fill" style="width:${Math.round(counts[s]/total*100)}%;background:${colors[s]}"></div></div>
+    </div>`).join('')}`;
+}
+
+// downloadSnapshot eliminado — Fase 2: persistencia via GitHub raw/API (ADR-001, ADR-008)
+
+// ─── CHANGELOG ───────────────────────────────────────────────────────────
+function toggleChangelog() {
+  const p = document.getElementById('changelog-panel-wrap');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) renderChangelog();
+}
+
+function renderChangelog() {
+  const panel = document.getElementById('changelog-panel');
+  if (!changelog.length) {
+    panel.innerHTML = '<p style="color:var(--muted);font-size:.75rem;padding:8px 0">Sin cambios registrados aún.</p>';
+    return;
+  }
+  // ts puede ser ISO 8601 (nuevo) o string locale (legado) — formatear en ambos casos
+  panel.innerHTML = [...changelog].reverse().slice(0, 20).map(c => {
+    let tsDisplay = c.ts;
+    try {
+      const d = new Date(c.ts);
+      if (!isNaN(d)) tsDisplay = d.toLocaleString('es-CL');
+    } catch(e) {}
+    return `<div class="changelog-entry">${tsDisplay} · <span>#${c.id} ${c.name}</span> → <span style="color:var(--s-${c.to})">${STATUS_LABELS[c.to]||c.to}</span> (era ${STATUS_LABELS[c.from]||c.from})</div>`;
+  }).join('');
+}
+
+async function clearChangelog() {
+  if (!isEditor) return;
+  if (!confirm('¿Limpiar historial de cambios?')) return;
+  changelog = [];
+  // Fase 4: persistir changelog vacío a GitHub (mismo flujo que saveChange)
+  try {
+    const { sha, freshState } = await getSha();
+    freshState.changelog = [];
+    freshState.updated_at = new Date().toISOString();
+    await putState(sha, freshState, 'chore: limpiar historial de cambios');
+    state     = freshState.state;
+    updatedAt = freshState.updated_at;
+    actualizarTimestamp();
+  } catch(e) {
+    // Si falla la persistencia, el changelog ya está vacío en memoria — se notifica
+    showFeedback('error', 'Historial limpiado en memoria pero no se pudo persistir.');
+  }
+  renderChangelog();
+}
+
+// ─── RESET ───────────────────────────────────────────────────────────────
+async function confirmReset() {
+  if (!isEditor) return;
+  if (!confirm('¿Resetear todos los estados a "En Cola"? Esta acción no se puede deshacer.')) return;
+  showFeedback('loading', 'Reseteando…');
+  try {
+    const { sha, freshState } = await getSha();
+    // Vaciar estados — getStatus() retornará 'queue' por defecto
+    freshState.state = {};
+    freshState.changelog = [...(freshState.changelog || []), {
+      ts: new Date().toISOString(), id: 0, name: 'Reset completo', from: 'all', to: 'queue'
+    }].slice(-200);
+    freshState.updated_at = new Date().toISOString();
+    await putState(sha, freshState, 'chore: reset completo de estados');
+    state     = {};
+    changelog = freshState.changelog;
+    updatedAt = freshState.updated_at;
+    actualizarTimestamp();
+    showFeedback('success');
+  } catch(e) {
+    showFeedback('error', 'No se pudo persistir el reset.');
+  }
+  renderAll();
+}
+
+// ─── PAT / MODO (tarea 3.4) ──────────────────────────────────────────────
+function promptPat() {
+  const pat = prompt('Pegá tu PAT de GitHub (Fine-grained, scope contents:write):');
+  if (pat && pat.trim()) {
+    localStorage.setItem('rdn_pat', pat.trim());
+    location.reload();
+  }
+}
+
+function exitEditor() {
+  if (!confirm('¿Salir del modo editor? Se eliminará el PAT de este navegador.')) return;
+  localStorage.removeItem('rdn_pat');
+  location.reload();
+}
+
+// ─── INIT MODO (tarea 3.5) ───────────────────────────────────────────────
+function initModeUI() {
+  const badge     = document.getElementById('mode-badge');
+  const btnConn   = document.getElementById('btn-connect');
+  const btnExit   = document.getElementById('btn-exit-edit');
+
+  if (isEditor) {
+    badge.textContent  = '✏️ Modo editor';
+    badge.className    = 'mode-badge editor-mode';
+    badge.setAttribute('aria-label', 'Modo editor activo — podés modificar estados');
+    // btn-exit-edit: visible (quitamos display:none inline)
+    if (btnExit) btnExit.style.display = '';
+    // btn-connect: oculto
+    if (btnConn) btnConn.style.display = 'none';
+  } else {
+    badge.textContent  = '🔒 Solo lectura';
+    badge.className    = 'mode-badge reader';
+    badge.setAttribute('aria-label', 'Modo solo lectura — el tablero no puede modificarse desde este navegador');
+    // btn-connect: visible
+    if (btnConn) btnConn.style.display = '';
+    // btn-exit-edit: oculto
+    if (btnExit) btnExit.style.display = 'none';
+  }
+}
+
+// ─── EXPORT EXCEL — FASE 7 (ADR-006) ─────────────────────────────────────
+// SheetJS pineado en 0.20.3 — verificado con curl -sI el 2026-06-17, da HTTP 200.
+// NO usar xlsx-latest (versión no determinista).
+const SHEETJS_URL = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+
+/**
+ * loadSheetJS(): carga SheetJS dinámicamente (lazy) al primer clic en Exportar.
+ * No se incluye en el <head> para no penalizar la carga inicial del tablero.
+ * Retorna una Promise que resuelve cuando window.XLSX está disponible.
+ */
+function loadSheetJS() {
+  return new Promise((resolve, reject) => {
+    if (typeof XLSX !== 'undefined') { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = SHEETJS_URL;
+    s.onload  = resolve;
+    s.onerror = () => reject(new Error('No se pudo cargar SheetJS desde CDN'));
+    document.head.appendChild(s);
+  });
+}
+
+/**
+ * exportToExcel(): exporta el estado en memoria a un .xlsx.
+ * Columnas: #, Hito, Categoría, GAP, Estado, Nota.
+ * Nombre de archivo: RedNegocios_Avance_YYYY-MM-DD.xlsx (fecha de updated_at).
+ * Funciona en modo lector y editor (tarea 7.4 — NO editor-only).
+ * Los datos vienen de DATA + state (no del DOM) → notas en texto plano (ADR-004).
+ */
+async function exportToExcel() {
+  try {
+    // 7.2: carga lazy — solo descarga SheetJS si no está ya en memoria
+    await loadSheetJS();
+  } catch(e) {
+    alert('No se pudo cargar la librería de exportación. Verificá tu conexión a internet.');
+    return;
+  }
+
+  // 7.3: armar filas desde estado en memoria
+  const rows = DATA.map(g => ({
+    '#':         g.id,
+    'Hito':      g.hito,
+    'Categoría': g.cat,
+    'GAP':       g.name,
+    'Estado':    STATUS_LABELS[getStatus(g.uid)] || getStatus(g.uid),
+    'Nota':      getNote(g.uid)
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Avance');
+
+  // Nombre de archivo determinístico: fecha de updated_at o hoy si no hay
+  const fechaStr = updatedAt ? updatedAt.slice(0, 10) : new Date().toISOString().slice(0, 10);
+  const filename = `RedNegocios_Avance_${fechaStr}.xlsx`;
+
+  XLSX.writeFile(wb, filename);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+initModeUI();
+loadState(); // async: carga desde raw.githubusercontent.com y llama renderAll() al terminar
+document.getElementById('search-input').addEventListener('input', renderAll);
+document.getElementById('filter-hito').addEventListener('change', renderAll);
+document.getElementById('filter-status').addEventListener('change', renderAll);
+</script>
+</body>
+</html>

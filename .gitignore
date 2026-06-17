@@ -1,0 +1,6 @@
+# Solo publicamos el tablero y su "base de datos".
+# El resto (plan, rollback, artefactos internos) queda fuera del repo público.
+*
+!index.html
+!state.json
+!.gitignore
