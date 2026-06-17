@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T20:54:06.793Z",
+  "updated_at": "2026-06-17T20:54:30.894Z",
   "state": {
     "1": {
       "status": "review",
@@ -59,7 +59,7 @@
       "note": ""
     },
     "15": {
-      "status": "progress",
+      "status": "review",
       "note": ""
     },
     "16": {
@@ -498,6 +498,13 @@
       "ts": "2026-06-17T20:54:06.793Z",
       "id": 28,
       "name": "GAP Sistema de guardado automático en inscripción",
+      "from": "progress",
+      "to": "review"
+    },
+    {
+      "ts": "2026-06-17T20:54:30.894Z",
+      "id": 27,
+      "name": "GAP: Lógica de conversión de proveedor VCO a están",
       "from": "progress",
       "to": "review"
     }
