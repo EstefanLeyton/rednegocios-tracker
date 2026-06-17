@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T19:40:15.419Z",
+  "updated_at": "2026-06-17T20:50:52.306Z",
   "state": {
     "1": {
       "status": "progress",
@@ -343,7 +343,7 @@
       "note": ""
     },
     "86": {
-      "status": "queue",
+      "status": "progress",
       "note": ""
     },
     "87": {
@@ -430,6 +430,13 @@
       "name": "GAP-RDN-12 IA acreditación de experiencia",
       "from": "queue",
       "to": "dep"
+    },
+    {
+      "ts": "2026-06-17T20:50:52.306Z",
+      "id": 92,
+      "name": "GAP Declaración en idioma inglés",
+      "from": "queue",
+      "to": "progress"
     }
   ]
 }
