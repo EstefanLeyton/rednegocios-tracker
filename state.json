@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:14:55.288Z",
+  "updated_at": "2026-06-17T21:17:39.276Z",
   "state": {
     "1": {
       "status": "review",
@@ -359,8 +359,8 @@
       "note": ""
     },
     "90": {
-      "status": "queue",
-      "note": ""
+      "status": "progress",
+      "note": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/487"
     },
     "91": {
       "status": "queue",
@@ -640,6 +640,13 @@
       "name": "GAP Visualizar estado de la inscripción blog traza",
       "from": "queue",
       "to": "review"
+    },
+    {
+      "ts": "2026-06-17T21:17:39.276Z",
+      "id": 87,
+      "name": "GAP: Auditorías especiales Codelco (ROLES Y PERFIL",
+      "from": "queue",
+      "to": "progress"
     }
   ]
 }
