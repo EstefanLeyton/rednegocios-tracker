@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:04:09.939Z",
+  "updated_at": "2026-06-17T21:07:12.315Z",
   "state": {
     "1": {
       "status": "review",
@@ -287,7 +287,7 @@
       "note": ""
     },
     "72": {
-      "status": "queue",
+      "status": "progress",
       "note": ""
     },
     "73": {
@@ -577,6 +577,13 @@
       "name": "GAP Hacer un mantenedor en plataforma (evitar plan",
       "from": "queue",
       "to": "queue"
+    },
+    {
+      "ts": "2026-06-17T21:07:12.315Z",
+      "id": 81,
+      "name": "GAP: Monitorear a Proveedores no Vigentes",
+      "from": "queue",
+      "to": "progress"
     }
   ]
 }
