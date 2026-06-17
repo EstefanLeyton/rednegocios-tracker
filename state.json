@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:11:29.202Z",
+  "updated_at": "2026-06-17T21:12:27.675Z",
   "state": {
     "1": {
       "status": "review",
@@ -419,8 +419,8 @@
       "note": ""
     },
     "105": {
-      "status": "queue",
-      "note": ""
+      "status": "dep",
+      "note": "depende de la ficha 360 que esta en curso"
     }
   },
   "changelog": [
@@ -626,6 +626,13 @@
       "name": "GAP-RDN-37 Desarrollo nuevo panel de cumplimiento ",
       "from": "queue",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-17T21:12:27.675Z",
+      "id": 102,
+      "name": "GAP-RDN-32 Implementar monitoreo permanente",
+      "from": "queue",
+      "to": "dep"
     }
   ]
 }
