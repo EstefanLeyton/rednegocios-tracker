@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-17T21:30:34.402Z",
+  "updated_at": "2026-06-18T12:58:42.577Z",
   "state": {
     "1": {
       "status": "review",
@@ -292,7 +292,7 @@
     },
     "73": {
       "status": "progress",
-      "note": ""
+      "note": "falta el guardado de búsquedas recientes\n"
     },
     "74": {
       "status": "progress",
@@ -654,6 +654,13 @@
       "name": "GAP-RDN-26 Declaración Jurada - fórmula",
       "from": "progress",
       "to": "review"
+    },
+    {
+      "ts": "2026-06-18T12:58:42.577Z",
+      "id": 85,
+      "name": "GAP Buscador avanzado mandante (PowerBI)",
+      "from": "progress",
+      "to": "progress"
     }
   ]
 }
