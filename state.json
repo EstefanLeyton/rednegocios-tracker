@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-18T19:19:37.816Z",
+  "updated_at": "2026-06-18T19:28:00.117Z",
   "state": {
     "1": {
       "status": "review",
@@ -227,7 +227,7 @@
       "note": ""
     },
     "57": {
-      "status": "queue",
+      "status": "progress",
       "note": ""
     },
     "58": {
@@ -668,6 +668,13 @@
       "name": "GAP-RDN-28 Doble factor de Autenticación (2FA)",
       "from": "queue",
       "to": "queue"
+    },
+    {
+      "ts": "2026-06-18T19:28:00.117Z",
+      "id": 51,
+      "name": "GAP Pentaho - Reporte de advertencia semanal batch",
+      "from": "queue",
+      "to": "progress"
     }
   ]
 }
