@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-18T20:01:16.105Z",
+  "updated_at": "2026-06-18T20:03:50.137Z",
   "state": {
     "1": {
       "status": "qa",
@@ -16,7 +16,8 @@
     },
     "4": {
       "status": "queue",
-      "note": ""
+      "note": "",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/491"
     },
     "5": {
       "status": "qa",
@@ -682,6 +683,13 @@
       "id": 87,
       "name": "GAP: Auditorías especiales Codelco (ROLES Y PERFIL",
       "from": "progress",
+      "to": "queue"
+    },
+    {
+      "ts": "2026-06-18T20:03:50.137Z",
+      "id": 8,
+      "name": "GAP Automatizar Gestión de proveedores de mercados",
+      "from": "queue",
       "to": "queue"
     }
   ]
