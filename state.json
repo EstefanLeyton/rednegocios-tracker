@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-18T20:04:50.751Z",
+  "updated_at": "2026-06-18T20:06:43.642Z",
   "state": {
     "1": {
       "status": "qa",
@@ -78,7 +78,7 @@
     },
     "19": {
       "status": "queue",
-      "note": ""
+      "note": "falta integracion con SAP"
     },
     "20": {
       "status": "progress",
@@ -697,6 +697,13 @@
       "ts": "2026-06-18T20:04:50.751Z",
       "id": 2,
       "name": "GAP Automatizar cálculos del ranking (SAP Codelco)",
+      "from": "queue",
+      "to": "queue"
+    },
+    {
+      "ts": "2026-06-18T20:06:43.642Z",
+      "id": 6,
+      "name": "GAP Seguimiento de actividades post evaluación",
       "from": "queue",
       "to": "queue"
     }
