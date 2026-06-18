@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-18T00:00:00.000Z",
+  "updated_at": "2026-06-18T20:01:16.105Z",
   "state": {
     "1": {
       "status": "qa",
@@ -359,8 +359,9 @@
       "note": ""
     },
     "90": {
-      "status": "progress",
-      "note": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/487"
+      "status": "queue",
+      "note": "",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/487"
     },
     "91": {
       "status": "queue",
@@ -675,6 +676,13 @@
       "name": "GAP Pentaho - Reporte de advertencia semanal batch",
       "from": "queue",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-18T20:01:16.105Z",
+      "id": 87,
+      "name": "GAP: Auditorías especiales Codelco (ROLES Y PERFIL",
+      "from": "progress",
+      "to": "queue"
     }
   ]
 }
