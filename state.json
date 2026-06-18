@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-18T20:06:43.642Z",
+  "updated_at": "2026-06-18T20:07:28.171Z",
   "state": {
     "1": {
       "status": "qa",
@@ -94,7 +94,7 @@
     },
     "23": {
       "status": "progress",
-      "note": ""
+      "note": "endpoints casi terminados\nfront implementado\nfalta conectar API"
     },
     "24": {
       "status": "qa",
@@ -706,6 +706,13 @@
       "name": "GAP Seguimiento de actividades post evaluación",
       "from": "queue",
       "to": "queue"
+    },
+    {
+      "ts": "2026-06-18T20:07:28.171Z",
+      "id": 15,
+      "name": "GAP Disponer de Múltiples evaluadores",
+      "from": "progress",
+      "to": "progress"
     }
   ]
 }
