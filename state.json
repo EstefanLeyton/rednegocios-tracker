@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-18T12:58:42.577Z",
+  "updated_at": "2026-06-18T19:19:37.816Z",
   "state": {
     "1": {
       "status": "review",
@@ -108,7 +108,7 @@
     },
     "27": {
       "status": "queue",
-      "note": ""
+      "note": "falta detalle"
     },
     "28": {
       "status": "progress",
@@ -661,6 +661,13 @@
       "name": "GAP Buscador avanzado mandante (PowerBI)",
       "from": "progress",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-18T19:19:37.816Z",
+      "id": 19,
+      "name": "GAP-RDN-28 Doble factor de Autenticación (2FA)",
+      "from": "queue",
+      "to": "queue"
     }
   ]
 }
