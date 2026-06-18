@@ -1,17 +1,17 @@
 {
   "version": 2,
-  "updated_at": "2026-06-18T19:28:00.117Z",
+  "updated_at": "2026-06-18T00:00:00.000Z",
   "state": {
     "1": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "2": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "3": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "4": {
@@ -19,7 +19,7 @@
       "note": ""
     },
     "5": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "6": {
@@ -35,35 +35,35 @@
       "note": ""
     },
     "9": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "10": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "11": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "12": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "13": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "14": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "15": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "16": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "17": {
@@ -71,7 +71,7 @@
       "note": ""
     },
     "18": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "19": {
@@ -95,7 +95,7 @@
       "note": ""
     },
     "24": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "25": {
@@ -219,7 +219,7 @@
       "note": ""
     },
     "55": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "56": {
@@ -283,7 +283,7 @@
       "note": ""
     },
     "71": {
-      "status": "review",
+      "status": "qa",
       "note": ""
     },
     "72": {

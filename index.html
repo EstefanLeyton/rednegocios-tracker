@@ -30,13 +30,14 @@
     --h3-bg: rgba(16,185,129,0.1);
     --h3-border: rgba(16,185,129,0.3);
 
-    --s-queue:    #64748b;
-    --s-progress: #3b82f6;
-    --s-done:     #10b981;
-    --s-blocked:  #ef4444;
-    --s-dep:      #f59e0b;
-    --s-review:   #a855f7;
-    --s-hold:     #6b7280;
+    --s-queue:    #94a3b8;
+    --s-progress: #60a5fa;
+    --s-dev:      #2dd4bf;
+    --s-qa:       #c084fc;
+    --s-done:     #34d399;
+    --s-blocked:  #f87171;
+    --s-dep:      #fbbf24;
+    --s-hold:     #cbd5e1;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -196,14 +197,15 @@
     padding: 3px 8px; border-radius: 4px; white-space: nowrap;
   }
 
-  /* Status colors */
-  .s-queue    { background: rgba(100,116,139,.15); color: #94a3b8; border: 1px solid rgba(100,116,139,.2); }
-  .s-progress { background: rgba(59,130,246,.15);  color: #60a5fa; border: 1px solid rgba(59,130,246,.2); }
-  .s-done     { background: rgba(16,185,129,.15);  color: #34d399; border: 1px solid rgba(16,185,129,.2); }
-  .s-blocked  { background: rgba(239,68,68,.15);   color: #f87171; border: 1px solid rgba(239,68,68,.2); }
-  .s-dep      { background: rgba(245,158,11,.15);  color: #fbbf24; border: 1px solid rgba(245,158,11,.2); }
-  .s-review   { background: rgba(168,85,247,.15);  color: #c084fc; border: 1px solid rgba(168,85,247,.2); }
-  .s-hold     { background: rgba(107,114,128,.15); color: #9ca3af; border: 1px solid rgba(107,114,128,.2); }
+  /* Status colors — paleta alto contraste (tonos 400/300, ≥4.5:1 vs fondo #0c0e14) */
+  .s-queue    { background: rgba(148,163,184,.15); color: #94a3b8; border: 1px solid rgba(148,163,184,.25); }
+  .s-progress { background: rgba(96,165,250,.15);  color: #60a5fa; border: 1px solid rgba(96,165,250,.25); }
+  .s-dev      { background: rgba(45,212,191,.15);  color: #2dd4bf; border: 1px solid rgba(45,212,191,.25); }
+  .s-qa       { background: rgba(192,132,252,.15); color: #c084fc; border: 1px solid rgba(192,132,252,.25); }
+  .s-done     { background: rgba(52,211,153,.15);  color: #34d399; border: 1px solid rgba(52,211,153,.25); }
+  .s-blocked  { background: rgba(248,113,113,.15); color: #f87171; border: 1px solid rgba(248,113,113,.25); }
+  .s-dep      { background: rgba(251,191,36,.15);  color: #fbbf24; border: 1px solid rgba(251,191,36,.25); }
+  .s-hold     { background: rgba(203,213,225,.15); color: #cbd5e1; border: 1px solid rgba(203,213,225,.25); }
 
   /* Hito colors applied to tags */
   .h1-tag { background: var(--h1-bg); color: var(--h1); border: 1px solid var(--h1-border); }
@@ -221,10 +223,11 @@
   }
   .gap-item.s-queue::before    { background: var(--s-queue); }
   .gap-item.s-progress::before { background: var(--s-progress); }
+  .gap-item.s-dev::before      { background: var(--s-dev); }
+  .gap-item.s-qa::before       { background: var(--s-qa); }
   .gap-item.s-done::before     { background: var(--s-done); }
   .gap-item.s-blocked::before  { background: var(--s-blocked); }
   .gap-item.s-dep::before      { background: var(--s-dep); }
-  .gap-item.s-review::before   { background: var(--s-review); }
   .gap-item.s-hold::before     { background: var(--s-hold); }
 
   .gap-actions { display: flex; gap: 4px; }
@@ -436,6 +439,37 @@
   .changelog-entry span { color: var(--text); }
   #changelog-panel { max-height: 240px; overflow-y: auto; margin-top: 10px; }
 
+  /* ─── TICKET LINK (card) ─── */
+  .gap-ticket-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: 'DM Mono', monospace; font-size: .65rem; font-weight: 500;
+    color: var(--accent); text-decoration: none;
+    background: rgba(79,110,247,.08); border: 1px solid rgba(79,110,247,.2);
+    border-radius: 4px; padding: 2px 7px;
+    transition: background .15s, border-color .15s, color .15s;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .gap-ticket-link:hover  { background: rgba(79,110,247,.18); border-color: var(--accent); color: #a5b4fc; }
+  .gap-ticket-link:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
+  /* ─── URL INPUT (modal) ─── */
+  .url-area { margin-top: 10px; }
+  .url-area label { font-size: .72rem; color: var(--muted); display: block; margin-bottom: 5px; }
+  .url-area input {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: .72rem;
+    padding: 7px 10px; border-radius: 6px;
+    outline: none; transition: border-color .15s;
+  }
+  .url-area input:focus { border-color: var(--accent); }
+  .url-area input.url-error { border-color: #f87171; }
+  .url-error-msg {
+    font-size: .68rem; color: #f87171; margin-top: 4px; display: none; line-height: 1.4;
+  }
+  .url-error-msg.visible { display: block; }
+
   /* ─── SAVE FEEDBACK (Fase 4 — ADR-003) ─── */
   #save-feedback {
     font-family: 'DM Mono', monospace;
@@ -537,10 +571,11 @@
       <option value="">Todos los Estados</option>
       <option value="queue">En Cola</option>
       <option value="progress">En Curso</option>
-      <option value="done">Terminado</option>
+      <option value="dev">En Dev</option>
+      <option value="qa">En QA</option>
+      <option value="done">Listo para Producción</option>
       <option value="blocked">Bloqueado</option>
-      <option value="dep">Con Dependencia</option>
-      <option value="review">En Revisión</option>
+      <option value="dep">Dependencia</option>
       <option value="hold">En Pausa</option>
     </select>
   </div>
@@ -559,18 +594,17 @@
   <div class="modal">
     <h3 id="modal-title">Cambiar Estado</h3>
     <p class="modal-sub" id="modal-sub"></p>
-    <div class="status-options">
-      <div class="status-opt s-queue"    onclick="setStatus('queue')"   ><span class="dot" style="background:var(--s-queue)"></span>En Cola</div>
-      <div class="status-opt s-progress" onclick="setStatus('progress')"><span class="dot" style="background:var(--s-progress)"></span>En Curso</div>
-      <div class="status-opt s-done"     onclick="setStatus('done')"    ><span class="dot" style="background:var(--s-done)"></span>Terminado</div>
-      <div class="status-opt s-blocked"  onclick="setStatus('blocked')" ><span class="dot" style="background:var(--s-blocked)"></span>Bloqueado</div>
-      <div class="status-opt s-dep"      onclick="setStatus('dep')"     ><span class="dot" style="background:var(--s-dep)"></span>Con Dependencia</div>
-      <div class="status-opt s-review"   onclick="setStatus('review')"  ><span class="dot" style="background:var(--s-review)"></span>En Revisión</div>
-      <div class="status-opt s-hold"     onclick="setStatus('hold')"    ><span class="dot" style="background:var(--s-hold)"></span>En Pausa</div>
+    <div class="status-options" id="status-options-grid">
+      <!-- Generado dinámicamente por renderModalOptions() desde STATES -->
     </div>
     <div class="note-area">
       <label>Nota / Comentario (opcional)</label>
       <textarea id="modal-note" placeholder="Ej: Bloqueado por espera de credenciales SII…"></textarea>
+    </div>
+    <div class="url-area">
+      <label for="modal-url">Link del ticket (Azure DevOps) — opcional</label>
+      <input type="url" id="modal-url" placeholder="https://dev.azure.com/…" autocomplete="off" spellcheck="false">
+      <div class="url-error-msg" id="modal-url-error">El link debe ser una URL de Azure DevOps que empiece con https://dev.azure.com/ o https://*.visualstudio.com/</div>
     </div>
     <div class="modal-footer">
       <!-- Botón guardar: habilitado en Fase 4 (escritura vía Contents API — ADR-003) -->
@@ -714,10 +748,24 @@ GAPS.forEach(g => {
 // Assign unique stable ids
 DATA.forEach((g, i) => { g.uid = i + 1; });
 
-const STATUS_LABELS = {
-  queue: 'En Cola', progress: 'En Curso', done: 'Terminado',
-  blocked: 'Bloqueado', dep: 'Con Dependencia', review: 'En Revisión', hold: 'En Pausa'
+// ─── FUENTE DE VERDAD: ESTADOS ───────────────────────────────────────────────
+// Agregar/cambiar un estado: SOLO tocar STATES. Todo lo demás se deriva.
+const STATES = {
+  queue:    { label: 'En Cola',                 color: '#94a3b8', order: 1 },
+  progress: { label: 'En Curso',                color: '#60a5fa', order: 2 },
+  dev:      { label: 'En Dev',                  color: '#2dd4bf', order: 3 },
+  qa:       { label: 'En QA',                   color: '#c084fc', order: 4 },
+  done:     { label: 'Listo para Producción',   color: '#34d399', order: 5 },
+  blocked:  { label: 'Bloqueado',               color: '#f87171', order: 6 },
+  dep:      { label: 'Dependencia',             color: '#fbbf24', order: 7 },
+  hold:     { label: 'En Pausa',                color: '#cbd5e1', order: 8 },
 };
+
+// Derivados — no duplicar manualmente
+const STATUS_LABELS = Object.fromEntries(Object.entries(STATES).map(([k, v]) => [k, v.label]));
+const STATUS_COLORS = Object.fromEntries(Object.entries(STATES).map(([k, v]) => [k, v.color]));
+const STATUS_ORDER  = Object.entries(STATES).sort((a, b) => a[1].order - b[1].order).map(([k]) => k);
+
 const HITO_CLASS = { 'Hito 1': 'h1-tag', 'Hito 2': 'h2-tag', 'Hito 3': 'h3-tag' };
 const HITO_COLOR_VAR = { 'Hito 1': '--h1', 'Hito 2': '--h2', 'Hito 3': '--h3' };
 
@@ -738,6 +786,21 @@ let updatedAt = null; // ISO string del state.json
 
 function getStatus(uid) { return (state[uid] && state[uid].status) || 'queue'; }
 function getNote(uid)   { return (state[uid] && state[uid].note)   || ''; }
+function getUrl(uid)    { return (state[uid] && state[uid].url)    || ''; }
+
+// Alias legacy para códigos que existían antes del refactor de estados
+const LEGACY_LABELS = {
+  review: 'En QA'  // "review" fue reemplazado por "qa" en el refactor v2
+};
+
+/**
+ * isValidAzureUrl(url): valida que la URL sea de Azure DevOps o VS Team Services.
+ * Acepta cadena vacía (sin link). Rechaza cualquier otro esquema (javascript:, etc.).
+ */
+function isValidAzureUrl(url) {
+  if (!url || url.trim() === '') return true; // vacío = sin link = válido
+  return /^https:\/\/(dev\.azure\.com|[a-z0-9-]+\.visualstudio\.com)\//i.test(url.trim());
+}
 
 // Tarea 2.3 (+ fix red corporativa): loadState async.
 // Intento 1: MISMO ORIGEN (GitHub Pages, ruta relativa) — evita firewalls
@@ -919,6 +982,22 @@ async function saveChange() {
   const uid      = activeUid;
   const newStatus = pendingStatus;
   const newNote   = document.getElementById('modal-note').value;
+  const urlInput  = document.getElementById('modal-url');
+  const urlError  = document.getElementById('modal-url-error');
+  const rawUrl    = urlInput ? urlInput.value.trim() : '';
+
+  // VALIDACIÓN DE SEGURIDAD: rechazar URLs que no sean de Azure DevOps
+  if (!isValidAzureUrl(rawUrl)) {
+    if (urlInput) urlInput.classList.add('url-error');
+    if (urlError) urlError.classList.add('visible');
+    urlInput && urlInput.focus();
+    return;
+  }
+  // URL válida — limpiar estado de error
+  if (urlInput) urlInput.classList.remove('url-error');
+  if (urlError) urlError.classList.remove('visible');
+
+  const newUrl    = rawUrl; // cadena vacía o URL validada
   const g         = DATA.find(x => x.uid === uid);
   const oldStatus = getStatus(uid);
 
@@ -935,7 +1014,9 @@ async function saveChange() {
 
     // 4.4 paso 3: merge — aplicar el cambio del modal sobre el estado fresco
     if (!freshState.state) freshState.state = {};
-    freshState.state[String(uid)] = { status: newStatus, note: newNote };
+    const gapEntry = { status: newStatus, note: newNote };
+    if (newUrl) gapEntry.url = newUrl; // solo incluir url si no está vacía
+    freshState.state[String(uid)] = gapEntry;
 
     // 6.1: appendear entrada al changelog ANTES del PUT (queda en el mismo commit)
     const entry = {
@@ -958,7 +1039,9 @@ async function saveChange() {
       // 4.6: manejo de 409 — sha desactualizado → reintento automático x1
       if (putErr.status === 409) {
         const retry = await getSha();
-        retry.freshState.state[String(uid)] = { status: newStatus, note: newNote };
+        const retryEntry = { status: newStatus, note: newNote };
+        if (newUrl) retryEntry.url = newUrl;
+        retry.freshState.state[String(uid)] = retryEntry;
         retry.freshState.changelog = [...(retry.freshState.changelog || []), entry].slice(-200);
         retry.freshState.updated_at = freshState.updated_at;
         newSha = await putState(retry.sha, retry.freshState, commitMsg);
@@ -1012,6 +1095,20 @@ async function saveChange() {
 let activeUid    = null;
 let pendingStatus = null;
 
+/**
+ * renderModalOptions(): genera los botones de estado del modal dinámicamente
+ * desde STATES (fuente de verdad). Se llama una sola vez al abrir por primera vez.
+ */
+function renderModalOptions() {
+  const grid = document.getElementById('status-options-grid');
+  if (!grid) return;
+  grid.innerHTML = STATUS_ORDER.map(s => {
+    const st = STATES[s];
+    return `<div class="status-opt s-${s}" onclick="setStatus('${s}')">` +
+      `<span class="dot" style="background:${st.color}"></span>${st.label}</div>`;
+  }).join('');
+}
+
 function openModal(uid) {
   // Tarea 3.3: solo editores pueden abrir el modal
   if (!isEditor) return;
@@ -1021,6 +1118,15 @@ function openModal(uid) {
   document.getElementById('modal-title').textContent = 'Cambiar Estado · GAP #' + g.id;
   document.getElementById('modal-sub').textContent = g.name;
   document.getElementById('modal-note').value = getNote(uid);
+
+  // Precargar URL existente y limpiar estado de error
+  const urlInput = document.getElementById('modal-url');
+  const urlError = document.getElementById('modal-url-error');
+  if (urlInput) { urlInput.value = getUrl(uid); urlInput.classList.remove('url-error'); }
+  if (urlError) urlError.classList.remove('visible');
+
+  // Generar opciones desde STATES (fuente de verdad)
+  renderModalOptions();
 
   // Resetear feedback visual al abrir
   showFeedback('hide');
@@ -1139,6 +1245,23 @@ function renderAll() {
           card.insertBefore(noteEl, gapBottom);
         }
 
+        // Link al ticket de Azure DevOps (visible para todos — lector y editor)
+        // Defensa en profundidad: revalidar antes de renderizar
+        const ticketUrl = getUrl(g.uid);
+        if (ticketUrl && isValidAzureUrl(ticketUrl)) {
+          const linkEl = document.createElement('a');
+          linkEl.className    = 'gap-ticket-link';
+          linkEl.href         = ticketUrl;
+          linkEl.target       = '_blank';
+          linkEl.rel          = 'noopener noreferrer';
+          linkEl.setAttribute('aria-label', 'Abrir ticket en Azure DevOps');
+          linkEl.textContent  = '🔗 Ticket';
+          // Evitar que el clic en el link abra el modal
+          linkEl.addEventListener('click', e => e.stopPropagation());
+          const gapBottom = card.querySelector('.gap-bottom');
+          card.insertBefore(linkEl, gapBottom);
+        }
+
         // Tarea 3.3: solo editores abren el modal al hacer clic en la card
         if (isEditor) {
           card.onclick = () => openModal(g.uid);
@@ -1169,8 +1292,7 @@ let _donutAnimated = false;
  * buildDonutAriaLabel(counts, total): genera el texto descriptivo para accesibilidad.
  */
 function buildDonutAriaLabel(counts, total) {
-  const statuses = ['queue','progress','done','blocked','dep','review','hold'];
-  const parts = statuses
+  const parts = STATUS_ORDER
     .filter(s => counts[s] > 0)
     .map(s => `${counts[s]} ${STATUS_LABELS[s].toLowerCase()}`)
     .join(', ');
@@ -1186,16 +1308,9 @@ function renderDonut(counts, total) {
   const wrap = document.getElementById('donut-wrap');
   if (!wrap) return;
 
-  const STATUSES = ['queue','progress','done','blocked','dep','review','hold'];
-  const COLORS = {
-    queue:    '#64748b',
-    progress: '#3b82f6',
-    done:     '#10b981',
-    blocked:  '#ef4444',
-    dep:      '#f59e0b',
-    review:   '#a855f7',
-    hold:     '#6b7280'
-  };
+  // Derivados de STATES (fuente de verdad) — no duplicar colores ni orden aquí
+  const STATUSES = STATUS_ORDER;
+  const COLORS   = STATUS_COLORS;
 
   const R   = 50;          // radio del círculo
   const CX  = 60;          // centro x
@@ -1407,8 +1522,9 @@ function renderDonut(counts, total) {
 }
 
 function renderSummary() {
-  const statuses = ['queue','progress','done','blocked','dep','review','hold'];
-  const colors = { queue:'#64748b', progress:'#3b82f6', done:'#10b981', blocked:'#ef4444', dep:'#f59e0b', review:'#a855f7', hold:'#6b7280' };
+  // Derivado de STATES — no duplicar aquí
+  const statuses = STATUS_ORDER;
+  const colors   = STATUS_COLORS;
   const total = DATA.length;
   const counts = {};
   statuses.forEach(s => { counts[s] = DATA.filter(g => getStatus(g.uid) === s).length; });
@@ -1455,7 +1571,10 @@ function renderChangelog() {
       const d = new Date(c.ts);
       if (!isNaN(d)) tsDisplay = d.toLocaleString('es-CL');
     } catch(e) {}
-    return `<div class="changelog-entry">${tsDisplay} · <span>#${c.id} ${c.name}</span> → <span style="color:var(--s-${c.to})">${STATUS_LABELS[c.to]||c.to}</span> (era ${STATUS_LABELS[c.from]||c.from})</div>`;
+    // Alias legacy: "review" → "En QA" (código reemplazado tras refactor v2 de estados)
+    const labelFor = code => STATES[code]?.label || LEGACY_LABELS[code] || code;
+    const colorFor = code => STATES[code] ? `var(--s-${code})` : 'var(--muted)';
+    return `<div class="changelog-entry">${tsDisplay} · <span>#${c.id} ${c.name}</span> → <span style="color:${colorFor(c.to)}">${labelFor(c.to)}</span> (era ${labelFor(c.from)})</div>`;
   }).join('');
 }
 
@@ -1588,7 +1707,8 @@ async function exportToExcel() {
     'Categoría': g.cat,
     'GAP':       g.name,
     'Estado':    STATUS_LABELS[getStatus(g.uid)] || getStatus(g.uid),
-    'Nota':      getNote(g.uid)
+    'Nota':      getNote(g.uid),
+    'Ticket':    getUrl(g.uid)  // URL de Azure DevOps (texto plano)
   }));
 
   const ws = XLSX.utils.json_to_sheet(rows);
