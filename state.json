@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-18T20:07:28.171Z",
+  "updated_at": "2026-06-19T14:57:58.802Z",
   "state": {
     "1": {
       "status": "qa",
@@ -110,7 +110,7 @@
     },
     "27": {
       "status": "queue",
-      "note": "falta detalle"
+      "note": "haciendo propuesta"
     },
     "28": {
       "status": "progress",
@@ -713,6 +713,13 @@
       "name": "GAP Disponer de Múltiples evaluadores",
       "from": "progress",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-19T14:57:58.802Z",
+      "id": 19,
+      "name": "GAP-RDN-28 Doble factor de Autenticación (2FA)",
+      "from": "queue",
+      "to": "queue"
     }
   ]
 }
