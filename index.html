@@ -470,6 +470,27 @@
   }
   .url-error-msg.visible { display: block; }
 
+  /* ─── RESPONSABLE LABEL (card) ─── */
+  .gap-owner {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: 'DM Sans', sans-serif; font-size: .68rem; font-weight: 600;
+    color: #fb923c;
+    background: rgba(251,146,60,0.15); border: 1px solid rgba(251,146,60,0.3);
+    border-radius: 4px; padding: 2px 7px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  /* ─── OWNER INPUT (modal) ─── */
+  .owner-area { margin-top: 10px; }
+  .owner-area label { font-size: .72rem; color: var(--muted); display: block; margin-bottom: 5px; }
+  .owner-area input {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: .78rem;
+    padding: 7px 10px; border-radius: 6px;
+    outline: none; transition: border-color .15s;
+  }
+  .owner-area input:focus { border-color: var(--accent); }
+
   /* ─── SAVE FEEDBACK (Fase 4 — ADR-003) ─── */
   #save-feedback {
     font-family: 'DM Mono', monospace;
@@ -605,6 +626,10 @@
       <label for="modal-url">Link del ticket (Azure DevOps) — opcional</label>
       <input type="url" id="modal-url" placeholder="https://dev.azure.com/…" autocomplete="off" spellcheck="false">
       <div class="url-error-msg" id="modal-url-error">El link debe ser una URL de Azure DevOps que empiece con https://dev.azure.com/ o https://*.visualstudio.com/</div>
+    </div>
+    <div class="owner-area">
+      <label for="modal-owner">Responsable — opcional</label>
+      <input type="text" id="modal-owner" placeholder="Nombre de quien lo realiza" autocomplete="off" spellcheck="false">
     </div>
     <div class="modal-footer">
       <!-- Botón guardar: habilitado en Fase 4 (escritura vía Contents API — ADR-003) -->
@@ -784,9 +809,10 @@ let state     = {}; // uid → { status, note }
 let changelog = [];
 let updatedAt = null; // ISO string del state.json
 
-function getStatus(uid) { return (state[uid] && state[uid].status) || 'queue'; }
-function getNote(uid)   { return (state[uid] && state[uid].note)   || ''; }
-function getUrl(uid)    { return (state[uid] && state[uid].url)    || ''; }
+function getStatus(uid)  { return (state[uid] && state[uid].status) || 'queue'; }
+function getNote(uid)    { return (state[uid] && state[uid].note)   || ''; }
+function getUrl(uid)     { return (state[uid] && state[uid].url)    || ''; }
+function getOwner(uid)   { return (state[uid] && state[uid].owner)  || ''; }
 
 // Alias legacy para códigos que existían antes del refactor de estados
 const LEGACY_LABELS = {
@@ -998,6 +1024,8 @@ async function saveChange() {
   if (urlError) urlError.classList.remove('visible');
 
   const newUrl    = rawUrl; // cadena vacía o URL validada
+  const ownerInput2 = document.getElementById('modal-owner');
+  const newOwner  = ownerInput2 ? ownerInput2.value.trim() : '';
   const g         = DATA.find(x => x.uid === uid);
   const oldStatus = getStatus(uid);
 
@@ -1015,7 +1043,8 @@ async function saveChange() {
     // 4.4 paso 3: merge — aplicar el cambio del modal sobre el estado fresco
     if (!freshState.state) freshState.state = {};
     const gapEntry = { status: newStatus, note: newNote };
-    if (newUrl) gapEntry.url = newUrl; // solo incluir url si no está vacía
+    if (newUrl)   gapEntry.url   = newUrl;   // solo incluir si no está vacía
+    if (newOwner) gapEntry.owner = newOwner; // solo incluir si no está vacío
     freshState.state[String(uid)] = gapEntry;
 
     // 6.1: appendear entrada al changelog ANTES del PUT (queda en el mismo commit)
@@ -1040,7 +1069,8 @@ async function saveChange() {
       if (putErr.status === 409) {
         const retry = await getSha();
         const retryEntry = { status: newStatus, note: newNote };
-        if (newUrl) retryEntry.url = newUrl;
+        if (newUrl)   retryEntry.url   = newUrl;
+        if (newOwner) retryEntry.owner = newOwner;
         retry.freshState.state[String(uid)] = retryEntry;
         retry.freshState.changelog = [...(retry.freshState.changelog || []), entry].slice(-200);
         retry.freshState.updated_at = freshState.updated_at;
@@ -1124,6 +1154,10 @@ function openModal(uid) {
   const urlError = document.getElementById('modal-url-error');
   if (urlInput) { urlInput.value = getUrl(uid); urlInput.classList.remove('url-error'); }
   if (urlError) urlError.classList.remove('visible');
+
+  // Precargar responsable existente
+  const ownerInput = document.getElementById('modal-owner');
+  if (ownerInput) ownerInput.value = getOwner(uid);
 
   // Generar opciones desde STATES (fuente de verdad)
   renderModalOptions();
@@ -1260,6 +1294,24 @@ function renderAll() {
           linkEl.addEventListener('click', e => e.stopPropagation());
           const gapBottom = card.querySelector('.gap-bottom');
           card.insertBefore(linkEl, gapBottom);
+        }
+
+        // Label de responsable — visible para todos (lector y editor)
+        // .textContent obligatorio: el nombre es texto libre del editor → prevención XSS
+        const ownerName = getOwner(g.uid);
+        if (ownerName) {
+          const ownerEl = document.createElement('div');
+          ownerEl.className = 'gap-owner';
+          ownerEl.setAttribute('aria-label', 'Responsable: ' + ownerName);
+          const iconEl = document.createElement('span');
+          iconEl.setAttribute('aria-hidden', 'true');
+          iconEl.textContent = '👤';
+          const nameEl = document.createElement('span');
+          nameEl.textContent = ownerName; // ← .textContent, nunca innerHTML con datos de usuario
+          ownerEl.appendChild(iconEl);
+          ownerEl.appendChild(nameEl);
+          const gapBottom = card.querySelector('.gap-bottom');
+          card.insertBefore(ownerEl, gapBottom);
         }
 
         // Tarea 3.3: solo editores abren el modal al hacer clic en la card
@@ -1702,13 +1754,14 @@ async function exportToExcel() {
 
   // 7.3: armar filas desde estado en memoria
   const rows = DATA.map(g => ({
-    '#':         g.id,
-    'Hito':      g.hito,
-    'Categoría': g.cat,
-    'GAP':       g.name,
-    'Estado':    STATUS_LABELS[getStatus(g.uid)] || getStatus(g.uid),
-    'Nota':      getNote(g.uid),
-    'Ticket':    getUrl(g.uid)  // URL de Azure DevOps (texto plano)
+    '#':             g.id,
+    'Hito':          g.hito,
+    'Categoría':     g.cat,
+    'GAP':           g.name,
+    'Estado':        STATUS_LABELS[getStatus(g.uid)] || getStatus(g.uid),
+    'Nota':          getNote(g.uid),
+    'Ticket':        getUrl(g.uid),    // URL de Azure DevOps (texto plano)
+    'Responsable':   getOwner(g.uid)   // Nombre de quien realiza el GAP
   }));
 
   const ws = XLSX.utils.json_to_sheet(rows);
