@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-19T14:57:58.802Z",
+  "updated_at": "2026-06-23T16:35:47.260Z",
   "state": {
     "1": {
       "status": "qa",
@@ -68,9 +68,10 @@
       "note": ""
     },
     "17": {
-      "status": "queue",
+      "status": "progress",
       "note": "",
-      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/503"
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/503",
+      "owner": "Estefan"
     },
     "18": {
       "status": "qa",
@@ -720,6 +721,13 @@
       "name": "GAP-RDN-28 Doble factor de Autenticación (2FA)",
       "from": "queue",
       "to": "queue"
+    },
+    {
+      "ts": "2026-06-23T16:35:47.260Z",
+      "id": 2,
+      "name": "GAP Automatizar cálculos del ranking (SAP Codelco)",
+      "from": "queue",
+      "to": "progress"
     }
   ]
 }
