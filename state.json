@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T16:45:08.131Z",
+  "updated_at": "2026-06-24T17:22:05.301Z",
   "state": {
     "1": {
       "status": "qa",
@@ -242,8 +242,9 @@
       "note": ""
     },
     "59": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "no esta en los 61 gaps inciiales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/577"
     },
     "60": {
       "status": "queue",
@@ -774,6 +775,13 @@
       "name": "GAP Automatizar el cálculo de segmentación en form",
       "from": "queue",
       "to": "qa"
+    },
+    {
+      "ts": "2026-06-24T17:22:05.301Z",
+      "id": 60,
+      "name": "GAP-RDN-29 Generación de Bitácora Documental (TRAZ",
+      "from": "queue",
+      "to": "rdn"
     }
   ]
 }
