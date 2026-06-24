@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-23T16:35:47.260Z",
+  "updated_at": "2026-06-24T16:37:02.718Z",
   "state": {
     "1": {
       "status": "qa",
@@ -110,8 +110,8 @@
       "note": ""
     },
     "27": {
-      "status": "queue",
-      "note": "haciendo propuesta"
+      "status": "rdn",
+      "note": "no esta en los 61 gaps iniciales"
     },
     "28": {
       "status": "progress",
@@ -728,6 +728,13 @@
       "name": "GAP Automatizar cálculos del ranking (SAP Codelco)",
       "from": "queue",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-24T16:37:02.718Z",
+      "id": 19,
+      "name": "GAP-RDN-28 Doble factor de Autenticación (2FA)",
+      "from": "queue",
+      "to": "rdn"
     }
   ]
 }
