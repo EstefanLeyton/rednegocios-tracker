@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:36:18.736Z",
+  "updated_at": "2026-06-24T17:43:41.986Z",
   "state": {
     "1": {
       "status": "qa",
@@ -193,8 +193,9 @@
       "note": ""
     },
     "46": {
-      "status": "queue",
-      "note": ""
+      "status": "dep",
+      "note": "fuera de los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/558"
     },
     "47": {
       "status": "queue",
@@ -814,6 +815,13 @@
       "name": "GAP-RDN-28 Doble factor de Autenticación (2FA)",
       "from": "rdn",
       "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T17:43:41.986Z",
+      "id": 75,
+      "name": "GAP-RDN-10 IA - ACREDITACION 1 NIVEL",
+      "from": "queue",
+      "to": "dep"
     }
   ]
 }
