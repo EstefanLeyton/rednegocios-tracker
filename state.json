@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:56:57.405Z",
+  "updated_at": "2026-06-24T17:58:17.771Z",
   "state": {
     "1": {
       "status": "qa",
@@ -228,8 +228,9 @@
       "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/548"
     },
     "54": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "no esta en los 61 gaps inicales negociados",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/532"
     },
     "55": {
       "status": "qa",
@@ -850,6 +851,13 @@
       "ts": "2026-06-24T17:56:57.405Z",
       "id": 71,
       "name": "GAP-RDN-56 Implementar formulario de Contacto",
+      "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T17:58:17.771Z",
+      "id": 100,
+      "name": "GAP-RDN-59 Gestión Contactos ARIBA (VISTA CONTACTO",
       "from": "queue",
       "to": "rdn"
     }
