@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T16:37:02.718Z",
+  "updated_at": "2026-06-24T16:40:53.868Z",
   "state": {
     "1": {
       "status": "qa",
@@ -134,8 +134,8 @@
       "note": "no hay detalle de objetivo"
     },
     "33": {
-      "status": "progress",
-      "note": ""
+      "status": "rdn",
+      "note": "no veo esto en los 61 gaps iniciales"
     },
     "34": {
       "status": "queue",
@@ -734,6 +734,13 @@
       "id": 19,
       "name": "GAP-RDN-28 Doble factor de Autenticación (2FA)",
       "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T16:40:53.868Z",
+      "id": 69,
+      "name": "GAP-RDN-2 Desarrollo ETL - Histórico",
+      "from": "progress",
       "to": "rdn"
     }
   ]
