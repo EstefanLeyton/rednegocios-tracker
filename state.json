@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T16:42:30.714Z",
+  "updated_at": "2026-06-24T16:45:08.131Z",
   "state": {
     "1": {
       "status": "qa",
@@ -164,8 +164,10 @@
       "note": ""
     },
     "40": {
-      "status": "queue",
-      "note": ""
+      "status": "qa",
+      "note": "",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/465",
+      "owner": "manuel"
     },
     "41": {
       "status": "queue",
@@ -765,6 +767,13 @@
       "name": "GAP-RDN-11 IA selección y validación categorías",
       "from": "rdn",
       "to": "dep"
+    },
+    {
+      "ts": "2026-06-24T16:45:08.131Z",
+      "id": 46,
+      "name": "GAP Automatizar el cálculo de segmentación en form",
+      "from": "queue",
+      "to": "qa"
     }
   ]
 }
