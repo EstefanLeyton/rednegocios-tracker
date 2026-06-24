@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:45:43.394Z",
+  "updated_at": "2026-06-24T17:51:09.721Z",
   "state": {
     "1": {
       "status": "qa",
@@ -219,8 +219,8 @@
       "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/579"
     },
     "52": {
-      "status": "queue",
-      "note": ""
+      "status": "blocked",
+      "note": "no se a que ticket de azure pertenece este gap"
     },
     "53": {
       "status": "queue",
@@ -830,6 +830,13 @@
       "name": "GAP-RDN-31 Módulo de Contactabilidad GESTOR",
       "from": "queue",
       "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T17:51:09.721Z",
+      "id": 68,
+      "name": "GAP-RDN-4 Desarrollo Módulo administración de marc",
+      "from": "queue",
+      "to": "blocked"
     }
   ]
 }
