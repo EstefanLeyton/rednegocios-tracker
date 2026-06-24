@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T18:07:34.940Z",
+  "updated_at": "2026-06-24T18:08:05.667Z",
   "state": {
     "1": {
       "status": "qa",
@@ -369,8 +369,9 @@
       "note": ""
     },
     "87": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/557"
     },
     "88": {
       "status": "rdn",
@@ -914,6 +915,13 @@
       "ts": "2026-06-24T18:07:34.940Z",
       "id": 98,
       "name": "GAP-RDN-8 Incorporación de cápsulas de ayuda",
+      "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T18:08:05.667Z",
+      "id": 97,
+      "name": "GAP-RDN-9 Incorporación de cápsulas de ayuda",
       "from": "queue",
       "to": "rdn"
     }
