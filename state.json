@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:26:16.044Z",
+  "updated_at": "2026-06-24T17:35:49.023Z",
   "state": {
     "1": {
       "status": "qa",
@@ -106,8 +106,9 @@
       "note": ""
     },
     "26": {
-      "status": "progress",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/549"
     },
     "27": {
       "status": "rdn",
@@ -796,6 +797,13 @@
       "ts": "2026-06-24T17:26:16.044Z",
       "id": 22,
       "name": "GAP-RDN-19 Generación de base para visualización",
+      "from": "progress",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T17:35:49.023Z",
+      "id": 18,
+      "name": "GAP-RDN-1 Actualización modelo de datos",
       "from": "progress",
       "to": "rdn"
     }
