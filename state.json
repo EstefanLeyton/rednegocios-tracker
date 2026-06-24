@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T18:05:39.570Z",
+  "updated_at": "2026-06-24T18:07:34.940Z",
   "state": {
     "1": {
       "status": "qa",
@@ -373,8 +373,9 @@
       "note": ""
     },
     "88": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de nuestro scope de los 61 gaps",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/556"
     },
     "89": {
       "status": "progress",
@@ -906,6 +907,13 @@
       "ts": "2026-06-24T18:05:39.570Z",
       "id": 104,
       "name": "GAP-RDN-59 Histórico segmentación vista proveedor",
+      "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T18:07:34.940Z",
+      "id": 98,
+      "name": "GAP-RDN-8 Incorporación de cápsulas de ayuda",
       "from": "queue",
       "to": "rdn"
     }
