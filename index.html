@@ -38,6 +38,7 @@
     --s-blocked:  #f87171;
     --s-dep:      #fbbf24;
     --s-hold:     #cbd5e1;
+    --s-rdn:      #475569;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -206,6 +207,7 @@
   .s-blocked  { background: rgba(248,113,113,.15); color: #f87171; border: 1px solid rgba(248,113,113,.25); }
   .s-dep      { background: rgba(251,191,36,.15);  color: #fbbf24; border: 1px solid rgba(251,191,36,.25); }
   .s-hold     { background: rgba(203,213,225,.15); color: #cbd5e1; border: 1px solid rgba(203,213,225,.25); }
+  .s-rdn      { background: rgba(71,85,105,.18);   color: #94a3b8; border: 1px solid rgba(71,85,105,.4); }
 
   /* Hito colors applied to tags */
   .h1-tag { background: var(--h1-bg); color: var(--h1); border: 1px solid var(--h1-border); }
@@ -229,6 +231,7 @@
   .gap-item.s-blocked::before  { background: var(--s-blocked); }
   .gap-item.s-dep::before      { background: var(--s-dep); }
   .gap-item.s-hold::before     { background: var(--s-hold); }
+  .gap-item.s-rdn::before      { background: var(--s-rdn); }
 
   .gap-actions { display: flex; gap: 4px; }
   .status-btn {
@@ -598,6 +601,7 @@
       <option value="blocked">Bloqueado</option>
       <option value="dep">Dependencia</option>
       <option value="hold">En Pausa</option>
+      <option value="rdn">Fuera de Scope (RDN)</option>
     </select>
   </div>
 
@@ -784,12 +788,15 @@ const STATES = {
   blocked:  { label: 'Bloqueado',               color: '#f87171', order: 6 },
   dep:      { label: 'Dependencia',             color: '#fbbf24', order: 7 },
   hold:     { label: 'En Pausa',                color: '#cbd5e1', order: 8 },
+  rdn:      { label: 'Fuera de Scope (RDN)',    color: '#475569', order: 9, offScope: true },
 };
 
 // Derivados — no duplicar manualmente
 const STATUS_LABELS = Object.fromEntries(Object.entries(STATES).map(([k, v]) => [k, v.label]));
 const STATUS_COLORS = Object.fromEntries(Object.entries(STATES).map(([k, v]) => [k, v.color]));
 const STATUS_ORDER  = Object.entries(STATES).sort((a, b) => a[1].order - b[1].order).map(([k]) => k);
+// Estados fuera de scope: no se contabilizan en el donut, los porcentajes ni el progreso de Hito.
+const OFF_SCOPE = new Set(Object.entries(STATES).filter(([, v]) => v.offScope).map(([k]) => k));
 
 const HITO_CLASS = { 'Hito 1': 'h1-tag', 'Hito 2': 'h2-tag', 'Hito 3': 'h3-tag' };
 const HITO_COLOR_VAR = { 'Hito 1': '--h1', 'Hito 2': '--h2', 'Hito 3': '--h3' };
@@ -1223,9 +1230,10 @@ function renderAll() {
     if (!visible.length) return;
     totalVisible += visible.length;
 
-    // Progress
-    const doneCount = hitoData.filter(g => getStatus(g.uid) === 'done').length;
-    const pct = Math.round(doneCount / hitoData.length * 100);
+    // Progress — los GAPs fuera de scope (RDN) no cuentan en el denominador
+    const scopeData  = hitoData.filter(g => !OFF_SCOPE.has(getStatus(g.uid)));
+    const doneCount  = scopeData.filter(g => getStatus(g.uid) === 'done').length;
+    const pct = scopeData.length ? Math.round(doneCount / scopeData.length * 100) : 0;
     const hClass = HITO_CLASS[hito];
     const hColorVar = HITO_COLOR_VAR[hito];
     const labels = { 'Hito 1':'Cimientos y Validación', 'Hito 2':'Automatización y Gestión Avanzada', 'Hito 3':'Consolidación y Gobernanza 360' };
@@ -1574,10 +1582,12 @@ function renderDonut(counts, total) {
 }
 
 function renderSummary() {
-  // Derivado de STATES — no duplicar aquí
-  const statuses = STATUS_ORDER;
+  // Derivado de STATES — no duplicar aquí. Los estados offScope (RDN) quedan
+  // fuera del gráfico: ni en el total, ni en los porcentajes, ni en el donut.
+  const statuses = STATUS_ORDER.filter(s => !OFF_SCOPE.has(s));
   const colors   = STATUS_COLORS;
-  const total = DATA.length;
+  const total = DATA.filter(g => !OFF_SCOPE.has(getStatus(g.uid))).length;
+  const offScopeCount = DATA.length - total;
   const counts = {};
   statuses.forEach(s => { counts[s] = DATA.filter(g => getStatus(g.uid) === s).length; });
 
@@ -1585,7 +1595,7 @@ function renderSummary() {
   grid.innerHTML = `
     <div class="summary-card">
       <span class="sc-count" style="color:var(--text)">${total}</span>
-      <span class="sc-label">Total GAPs</span>
+      <span class="sc-label">Total GAPs (en scope)</span>
       <div class="sc-bar"><div class="sc-fill" style="width:100%;background:var(--border2)"></div></div>
     </div>
     ${statuses.map(s => `
@@ -1594,10 +1604,16 @@ function renderSummary() {
          onmouseleave="(function(){ const w=document.getElementById('donut-wrap'); if(w&&w._clearHighlight) w._clearHighlight(); })()">
       <span class="sc-count" style="color:${colors[s]}">${counts[s]}</span>
       <span class="sc-label">${STATUS_LABELS[s]}</span>
-      <div class="sc-bar"><div class="sc-fill" style="width:${Math.round(counts[s]/total*100)}%;background:${colors[s]}"></div></div>
-    </div>`).join('')}`;
+      <div class="sc-bar"><div class="sc-fill" style="width:${total ? Math.round(counts[s]/total*100) : 0}%;background:${colors[s]}"></div></div>
+    </div>`).join('')}
+    ${offScopeCount ? `
+    <div class="summary-card" data-status="rdn" title="GAPs fuera de scope — no se contabilizan en el gráfico ni en el progreso">
+      <span class="sc-count" style="color:${STATUS_COLORS.rdn}">${offScopeCount}</span>
+      <span class="sc-label">Fuera de scope · RDN</span>
+      <div class="sc-bar"><div class="sc-fill" style="width:100%;background:${STATUS_COLORS.rdn}"></div></div>
+    </div>` : ''}`;
 
-  // Renderizar el donut con los mismos counts
+  // Renderizar el donut con los mismos counts (solo estados en scope)
   renderDonut(counts, total);
 }
 
