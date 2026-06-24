@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T16:40:53.868Z",
+  "updated_at": "2026-06-24T16:42:03.302Z",
   "state": {
     "1": {
       "status": "qa",
@@ -142,8 +142,9 @@
       "note": ""
     },
     "35": {
-      "status": "queue",
-      "note": ""
+      "status": "dep",
+      "note": "nimok",
+      "owner": "nimok"
     },
     "36": {
       "status": "progress",
@@ -742,6 +743,13 @@
       "name": "GAP-RDN-2 Desarrollo ETL - Histórico",
       "from": "progress",
       "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T16:42:03.302Z",
+      "id": 35,
+      "name": "GAP-RDN-11 IA selección y validación categorías",
+      "from": "queue",
+      "to": "dep"
     }
   ]
 }
