@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:43:41.986Z",
+  "updated_at": "2026-06-24T17:45:43.394Z",
   "state": {
     "1": {
       "status": "qa",
@@ -214,8 +214,9 @@
       "note": "falta detalle en el ticket"
     },
     "51": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/579"
     },
     "52": {
       "status": "queue",
@@ -822,6 +823,13 @@
       "name": "GAP-RDN-10 IA - ACREDITACION 1 NIVEL",
       "from": "queue",
       "to": "dep"
+    },
+    {
+      "ts": "2026-06-24T17:45:43.394Z",
+      "id": 59,
+      "name": "GAP-RDN-31 Módulo de Contactabilidad GESTOR",
+      "from": "queue",
+      "to": "rdn"
     }
   ]
 }
