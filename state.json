@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T16:42:03.302Z",
+  "updated_at": "2026-06-24T16:42:22.380Z",
   "state": {
     "1": {
       "status": "qa",
@@ -142,8 +142,9 @@
       "note": ""
     },
     "35": {
-      "status": "dep",
+      "status": "rdn",
       "note": "nimok",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/458",
       "owner": "nimok"
     },
     "36": {
@@ -750,6 +751,13 @@
       "name": "GAP-RDN-11 IA selección y validación categorías",
       "from": "queue",
       "to": "dep"
+    },
+    {
+      "ts": "2026-06-24T16:42:22.380Z",
+      "id": 35,
+      "name": "GAP-RDN-11 IA selección y validación categorías",
+      "from": "dep",
+      "to": "rdn"
     }
   ]
 }
