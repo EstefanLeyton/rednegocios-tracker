@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:58:17.771Z",
+  "updated_at": "2026-06-24T17:59:06.203Z",
   "state": {
     "1": {
       "status": "qa",
@@ -219,8 +219,9 @@
       "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/579"
     },
     "52": {
-      "status": "blocked",
-      "note": "no se a que ticket de azure pertenece este gap"
+      "status": "rdn",
+      "note": "fuera de los 61 gaps negociados",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/552"
     },
     "53": {
       "status": "rdn",
@@ -859,6 +860,13 @@
       "id": 100,
       "name": "GAP-RDN-59 Gestión Contactos ARIBA (VISTA CONTACTO",
       "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T17:59:06.203Z",
+      "id": 68,
+      "name": "GAP-RDN-4 Desarrollo Módulo administración de marc",
+      "from": "blocked",
       "to": "rdn"
     }
   ]
