@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T18:01:10.820Z",
+  "updated_at": "2026-06-24T18:03:13.790Z",
   "state": {
     "1": {
       "status": "qa",
@@ -256,8 +256,9 @@
       "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/577"
     },
     "60": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/554"
     },
     "61": {
       "status": "queue",
@@ -876,6 +877,13 @@
       "name": "GAP-RDN-58 Actualización permanente mensual (input",
       "from": "qa",
       "to": "qa"
+    },
+    {
+      "ts": "2026-06-24T18:03:13.790Z",
+      "id": 67,
+      "name": "GAP-RDN-6 Acreditación de representantes legales",
+      "from": "queue",
+      "to": "rdn"
     }
   ]
 }
