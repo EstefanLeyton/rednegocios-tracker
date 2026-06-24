@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:52:33.537Z",
+  "updated_at": "2026-06-24T17:56:57.405Z",
   "state": {
     "1": {
       "status": "qa",
@@ -223,8 +223,9 @@
       "note": "no se a que ticket de azure pertenece este gap"
     },
     "53": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/548"
     },
     "54": {
       "status": "queue",
@@ -844,6 +845,13 @@
       "name": "GAP-RDN-57 Upgrade al módulo de evaluación",
       "from": "progress",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-24T17:56:57.405Z",
+      "id": 71,
+      "name": "GAP-RDN-56 Implementar formulario de Contacto",
+      "from": "queue",
+      "to": "rdn"
     }
   ]
 }
