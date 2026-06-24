@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T18:10:22.837Z",
+  "updated_at": "2026-06-24T18:13:13.323Z",
   "state": {
     "1": {
       "status": "qa",
@@ -426,8 +426,9 @@
       "note": ""
     },
     "100": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "tenemos algo avanzado pero esta fuera de los 61 gaps",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/523"
     },
     "101": {
       "status": "progress",
@@ -938,6 +939,13 @@
       "ts": "2026-06-24T18:10:22.837Z",
       "id": 73,
       "name": "GAP-RDN-39 Implementar Certificación de concordanc",
+      "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T18:13:13.323Z",
+      "id": 78,
+      "name": "GAP-RDN-34 Generación de alertas por pérdida",
       "from": "queue",
       "to": "rdn"
     }
