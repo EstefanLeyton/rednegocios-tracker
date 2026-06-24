@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:23:50.082Z",
+  "updated_at": "2026-06-24T17:26:16.044Z",
   "state": {
     "1": {
       "status": "qa",
@@ -114,8 +114,9 @@
       "note": "no esta en los 61 gaps iniciales"
     },
     "28": {
-      "status": "progress",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps negociados ",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/567"
     },
     "29": {
       "status": "progress",
@@ -789,6 +790,13 @@
       "id": 76,
       "name": "GAP-RDN-55 Módulo de seguimiento y control de capa",
       "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T17:26:16.044Z",
+      "id": 22,
+      "name": "GAP-RDN-19 Generación de base para visualización",
+      "from": "progress",
       "to": "rdn"
     }
   ]
