@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:59:06.203Z",
+  "updated_at": "2026-06-24T18:01:10.820Z",
   "state": {
     "1": {
       "status": "qa",
@@ -99,7 +99,8 @@
     },
     "24": {
       "status": "qa",
-      "note": ""
+      "note": "este igual no nos correspondia",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/531"
     },
     "25": {
       "status": "progress",
@@ -868,6 +869,13 @@
       "name": "GAP-RDN-4 Desarrollo Módulo administración de marc",
       "from": "blocked",
       "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T18:01:10.820Z",
+      "id": 25,
+      "name": "GAP-RDN-58 Actualización permanente mensual (input",
+      "from": "qa",
+      "to": "qa"
     }
   ]
 }
