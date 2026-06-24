@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T18:04:09.081Z",
+  "updated_at": "2026-06-24T18:04:53.459Z",
   "state": {
     "1": {
       "status": "qa",
@@ -266,8 +266,9 @@
       "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/552"
     },
     "62": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/527"
     },
     "63": {
       "status": "progress",
@@ -890,6 +891,13 @@
       "ts": "2026-06-24T18:04:09.081Z",
       "id": 70,
       "name": "GAP- RDN 4 Manejo excepciones-trazabilidad (Autori",
+      "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T18:04:53.459Z",
+      "id": 74,
+      "name": "GAP-RDN-38 Tabulación de Verificaciones en Terreno",
       "from": "queue",
       "to": "rdn"
     }
