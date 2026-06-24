@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T18:03:13.790Z",
+  "updated_at": "2026-06-24T18:04:09.081Z",
   "state": {
     "1": {
       "status": "qa",
@@ -261,8 +261,9 @@
       "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/554"
     },
     "61": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps negociados",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/552"
     },
     "62": {
       "status": "queue",
@@ -882,6 +883,13 @@
       "ts": "2026-06-24T18:03:13.790Z",
       "id": 67,
       "name": "GAP-RDN-6 Acreditación de representantes legales",
+      "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T18:04:09.081Z",
+      "id": 70,
+      "name": "GAP- RDN 4 Manejo excepciones-trazabilidad (Autori",
       "from": "queue",
       "to": "rdn"
     }
