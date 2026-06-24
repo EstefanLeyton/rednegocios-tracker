@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T17:35:49.023Z",
+  "updated_at": "2026-06-24T17:36:18.736Z",
   "state": {
     "1": {
       "status": "qa",
@@ -112,7 +112,8 @@
     },
     "27": {
       "status": "rdn",
-      "note": "no esta en los 61 gaps iniciales"
+      "note": "no esta en los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/576"
     },
     "28": {
       "status": "rdn",
@@ -805,6 +806,13 @@
       "id": 18,
       "name": "GAP-RDN-1 Actualización modelo de datos",
       "from": "progress",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-24T17:36:18.736Z",
+      "id": 19,
+      "name": "GAP-RDN-28 Doble factor de Autenticación (2FA)",
+      "from": "rdn",
       "to": "rdn"
     }
   ]
