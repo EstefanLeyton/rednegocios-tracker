@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T13:18:50.034Z",
+  "updated_at": "2026-06-25T18:15:16.052Z",
   "state": {
     "1": {
       "status": "qa",
@@ -394,8 +394,9 @@
       "note": ""
     },
     "92": {
-      "status": "queue",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/572"
     },
     "93": {
       "status": "progress",
@@ -971,6 +972,13 @@
       "name": "GAP Buscador avanzado mandante (PowerBI)",
       "from": "progress",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-25T18:15:16.052Z",
+      "id": 94,
+      "name": "GAP-RDN-24 Diseño manejo consentimiento datos pers",
+      "from": "queue",
+      "to": "rdn"
     }
   ]
 }
