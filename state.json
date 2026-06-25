@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T22:23:51.941Z",
+  "updated_at": "2026-06-25T22:24:19.213Z",
   "state": {
     "1": {
       "status": "qa",
@@ -212,7 +212,7 @@
       "note": ""
     },
     "50": {
-      "status": "queue",
+      "status": "dep",
       "note": "falta detalle en el ticket"
     },
     "51": {
@@ -1032,6 +1032,13 @@
       "ts": "2026-06-25T22:23:51.941Z",
       "id": 40,
       "name": "GAP Integración con LMS (ACADEMIA)",
+      "from": "queue",
+      "to": "dep"
+    },
+    {
+      "ts": "2026-06-25T22:24:19.213Z",
+      "id": 50,
+      "name": "GAP Hacer un mantenedor en plataforma (evitar plan",
       "from": "queue",
       "to": "dep"
     }
