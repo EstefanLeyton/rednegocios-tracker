@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T22:24:55.248Z",
+  "updated_at": "2026-06-25T22:31:04.047Z",
   "state": {
     "1": {
       "status": "qa",
@@ -143,8 +143,9 @@
       "note": "no veo esto en los 61 gaps iniciales"
     },
     "34": {
-      "status": "queue",
-      "note": ""
+      "status": "dep",
+      "note": "no tiene detalle | Depende de RDN",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/505"
     },
     "35": {
       "status": "dep",
@@ -1046,6 +1047,13 @@
       "ts": "2026-06-25T22:24:55.248Z",
       "id": 49,
       "name": "GAP: Asignación automática de segmento",
+      "from": "queue",
+      "to": "dep"
+    },
+    {
+      "ts": "2026-06-25T22:31:04.047Z",
+      "id": 103,
+      "name": "GAP - Histórico segmentación (tendencias y proyecc",
       "from": "queue",
       "to": "dep"
     }
