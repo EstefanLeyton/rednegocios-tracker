@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T13:18:09.659Z",
+  "updated_at": "2026-06-25T13:18:50.034Z",
   "state": {
     "1": {
       "status": "qa",
@@ -315,7 +315,8 @@
     },
     "73": {
       "status": "progress",
-      "note": "falta el guardado de búsquedas recientes\n"
+      "note": "\n",
+      "owner": "Jona | Patricio"
     },
     "74": {
       "status": "progress",
@@ -963,6 +964,13 @@
       "name": "GAP-RDN-16 Integración DOE",
       "from": "blocked",
       "to": "blocked"
+    },
+    {
+      "ts": "2026-06-25T13:18:50.033Z",
+      "id": 85,
+      "name": "GAP Buscador avanzado mandante (PowerBI)",
+      "from": "progress",
+      "to": "progress"
     }
   ]
 }
