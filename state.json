@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T13:17:58.653Z",
+  "updated_at": "2026-06-25T13:18:09.659Z",
   "state": {
     "1": {
       "status": "qa",
@@ -29,7 +29,8 @@
     },
     "7": {
       "status": "blocked",
-      "note": "necesitamos el acceso desde el ip "
+      "note": "necesitamos el acceso desde el ip ",
+      "owner": "manuel | seba"
     },
     "8": {
       "status": "progress",
@@ -951,6 +952,13 @@
     },
     {
       "ts": "2026-06-25T13:17:58.653Z",
+      "id": 13,
+      "name": "GAP-RDN-16 Integración DOE",
+      "from": "blocked",
+      "to": "blocked"
+    },
+    {
+      "ts": "2026-06-25T13:18:09.659Z",
       "id": 13,
       "name": "GAP-RDN-16 Integración DOE",
       "from": "blocked",
