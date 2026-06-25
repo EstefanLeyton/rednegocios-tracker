@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-24T18:13:13.323Z",
+  "updated_at": "2026-06-25T13:17:58.653Z",
   "state": {
     "1": {
       "status": "qa",
@@ -29,7 +29,7 @@
     },
     "7": {
       "status": "blocked",
-      "note": ""
+      "note": "necesitamos el acceso desde el ip "
     },
     "8": {
       "status": "progress",
@@ -948,6 +948,13 @@
       "name": "GAP-RDN-34 Generación de alertas por pérdida",
       "from": "queue",
       "to": "rdn"
+    },
+    {
+      "ts": "2026-06-25T13:17:58.653Z",
+      "id": 13,
+      "name": "GAP-RDN-16 Integración DOE",
+      "from": "blocked",
+      "to": "blocked"
     }
   ]
 }
