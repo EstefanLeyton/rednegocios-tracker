@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T18:15:16.052Z",
+  "updated_at": "2026-06-25T18:18:27.476Z",
   "state": {
     "1": {
       "status": "qa",
@@ -438,8 +438,9 @@
       "note": ""
     },
     "102": {
-      "status": "progress",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/568"
     },
     "103": {
       "status": "progress",
@@ -978,6 +979,13 @@
       "id": 94,
       "name": "GAP-RDN-24 Diseño manejo consentimiento datos pers",
       "from": "queue",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-25T18:18:27.476Z",
+      "id": 93,
+      "name": "GAP-RDN-30 Desarrollo Dashboard de cumplimiento",
+      "from": "progress",
       "to": "rdn"
     }
   ]
