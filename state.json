@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T22:31:04.047Z",
+  "updated_at": "2026-06-25T22:32:08.983Z",
   "state": {
     "1": {
       "status": "qa",
@@ -140,7 +140,8 @@
     },
     "33": {
       "status": "rdn",
-      "note": "no veo esto en los 61 gaps iniciales"
+      "note": "no veo esto en los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/550"
     },
     "34": {
       "status": "dep",
@@ -1056,6 +1057,13 @@
       "name": "GAP - Histórico segmentación (tendencias y proyecc",
       "from": "queue",
       "to": "dep"
+    },
+    {
+      "ts": "2026-06-25T22:32:08.983Z",
+      "id": 69,
+      "name": "GAP-RDN-2 Desarrollo ETL - Histórico",
+      "from": "rdn",
+      "to": "rdn"
     }
   ]
 }
