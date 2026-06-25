@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T22:18:14.692Z",
+  "updated_at": "2026-06-25T22:20:28.141Z",
   "state": {
     "1": {
       "status": "qa",
@@ -335,8 +335,8 @@
       "note": ""
     },
     "78": {
-      "status": "queue",
-      "note": "falta detalle "
+      "status": "dep",
+      "note": "falta detalle  | \ndependen de RDN"
     },
     "79": {
       "status": "queue",
@@ -1011,6 +1011,13 @@
       "name": "GAP-RDN-36 Desarrollo nuevo panel de alertas",
       "from": "progress",
       "to": "progress"
+    },
+    {
+      "ts": "2026-06-25T22:20:28.141Z",
+      "id": 1031,
+      "name": "GAP - Histórico segmentación (tendencias y proyecc",
+      "from": "queue",
+      "to": "dep"
     }
   ]
 }
