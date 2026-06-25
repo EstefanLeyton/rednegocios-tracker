@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T18:19:33.522Z",
+  "updated_at": "2026-06-25T22:18:14.692Z",
   "state": {
     "1": {
       "status": "qa",
@@ -426,7 +426,8 @@
     },
     "99": {
       "status": "progress",
-      "note": ""
+      "note": "esto esta fuera de los 61 gaps",
+      "owner": "enrique"
     },
     "100": {
       "status": "rdn",
@@ -1003,6 +1004,13 @@
       "name": "GAP-RDN-33 Generación de alertas de cumplimiento",
       "from": "progress",
       "to": "rdn"
+    },
+    {
+      "ts": "2026-06-25T22:18:14.692Z",
+      "id": 77,
+      "name": "GAP-RDN-36 Desarrollo nuevo panel de alertas",
+      "from": "progress",
+      "to": "progress"
     }
   ]
 }
