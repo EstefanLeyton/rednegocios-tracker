@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T22:23:19.456Z",
+  "updated_at": "2026-06-25T22:23:51.941Z",
   "state": {
     "1": {
       "status": "qa",
@@ -284,8 +284,9 @@
       "note": ""
     },
     "66": {
-      "status": "queue",
-      "note": ""
+      "status": "dep",
+      "note": "falta definir criterios de aceptacion ",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/512"
     },
     "67": {
       "status": "dep",
@@ -1024,6 +1025,13 @@
       "ts": "2026-06-25T22:23:19.456Z",
       "id": 41,
       "name": "GAP Plataforma de Elearning externa a RDN (SSO)",
+      "from": "queue",
+      "to": "dep"
+    },
+    {
+      "ts": "2026-06-25T22:23:51.941Z",
+      "id": 40,
+      "name": "GAP Integración con LMS (ACADEMIA)",
       "from": "queue",
       "to": "dep"
     }
