@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T18:18:27.476Z",
+  "updated_at": "2026-06-25T18:18:45.721Z",
   "state": {
     "1": {
       "status": "qa",
@@ -443,8 +443,9 @@
       "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/568"
     },
     "103": {
-      "status": "progress",
-      "note": ""
+      "status": "rdn",
+      "note": "fuera de los 61 gaps iniciales",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/568"
     },
     "104": {
       "status": "progress",
@@ -985,6 +986,13 @@
       "ts": "2026-06-25T18:18:27.476Z",
       "id": 93,
       "name": "GAP-RDN-30 Desarrollo Dashboard de cumplimiento",
+      "from": "progress",
+      "to": "rdn"
+    },
+    {
+      "ts": "2026-06-25T18:18:45.721Z",
+      "id": 96,
+      "name": "GAP-RDN-20 Desarrollo Dashboard de cumplimiento",
       "from": "progress",
       "to": "rdn"
     }
