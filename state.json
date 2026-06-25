@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-06-25T22:20:28.141Z",
+  "updated_at": "2026-06-25T22:23:19.456Z",
   "state": {
     "1": {
       "status": "qa",
@@ -288,8 +288,9 @@
       "note": ""
     },
     "67": {
-      "status": "queue",
-      "note": ""
+      "status": "dep",
+      "note": "Criterios de aceptacion faltantes",
+      "url": "https://dev.azure.com/rednegocios/Codelco-Licitacion/_workitems/edit/512"
     },
     "68": {
       "status": "queue",
@@ -1016,6 +1017,13 @@
       "ts": "2026-06-25T22:20:28.141Z",
       "id": 1031,
       "name": "GAP - Histórico segmentación (tendencias y proyecc",
+      "from": "queue",
+      "to": "dep"
+    },
+    {
+      "ts": "2026-06-25T22:23:19.456Z",
+      "id": 41,
+      "name": "GAP Plataforma de Elearning externa a RDN (SSO)",
       "from": "queue",
       "to": "dep"
     }
